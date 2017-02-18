@@ -58,7 +58,10 @@ public:
 
 		/* Insert x after k-th element.
 		 * */
-		void  insert(const int  k, Item& x);
+
+    // CHANGED I made the insertion parameter a const so that constants
+    // like 1, "hello!" etc can be added to the list without making variables
+		void  insert(const int  k, const Item& x);
 
 private:
 		int MaxSize;
@@ -160,7 +163,7 @@ void LinearList<Item>::deleteElement(const int k, Item& x)
 }
 
 template<class Item>
-void LinearList<Item>::insert(const int k, Item& x)
+void LinearList<Item>::insert(const int k, const Item& x)
 {
     if (k < 0 || k >= MaxSize - 1) {
         throw std::range_error("cannot insert at requested position");
@@ -171,6 +174,7 @@ void LinearList<Item>::insert(const int k, Item& x)
     }
 
     element[k] = x;
+    len++;
 }
 
 #endif
