@@ -14,6 +14,9 @@ public:
 		/* This constructor should create a list containing MaxSize elements. You can intialize the elements with any values.*/
 		LinearList(const int& MaxListSize);
 
+    /* Copy constructor */
+		LinearList(const LinearList<Item>& other);
+
 		/* Destructor.
 		 * Must free all the memory contained by the list */
 		~LinearList();
@@ -28,19 +31,20 @@ public:
 
 		/* Returns true if the list is empty, false otherwise.
      		 * */
-		bool isEmpty();
+		bool isEmpty() const;
 
 		/* Returns the actual length (number of elements) in the list.
      		 * */
-		int  length();
+		int length() const;
 
 		/* Returns the maximum size of the list.
      		 * */
-		int  maxSize();
+		int maxSize() const;
 
 		/* Returns the k-th element of the list.
+     * Use this instead of the operator if you want a const reference instead of a modifiable one
 		 * */
-		Item  returnListElement(const int k);
+		const Item& returnListElement(const int k) const;
 
 		/* Set x to the k-th element and
 		 * return true if k-th element is present otherwise return false.
@@ -50,18 +54,18 @@ public:
 		/* Search for x and
 		 * return the position if found, else return 0. (actually returns -1 as 0 is a valid position)
 		 * */
-		int  search(Item& x);
+		int search(Item& x) const;
 
 		/* Set x to the k-th element and delete that k-th element.
 		 * */
-		void  deleteElement(const int  k, Item& x);
+		void deleteElement(const int  k, Item& x);
 
 		/* Insert x after k-th element.
 		 * */
 
     // CHANGED I made the insertion parameter a const so that constants
     // like 1, "hello!" etc can be added to the list without making variables
-		void  insert(const int  k, const Item& x);
+		void insert(const int  k, const Item& x);
 
 private:
 		int MaxSize;
@@ -88,6 +92,19 @@ LinearList<Item>::LinearList(const int& MaxListSize)
     len = 0;
 }
 
+
+template<class Item>
+LinearList<Item>::LinearList(const LinearList<Item>& other)
+{
+    MaxSize = other.maxSize();
+    element = new Item[MaxSize];
+    len = other.length();
+
+    for (int i = 0; i < len; i++) {
+        element[i] = other.returnListElement(i);
+    }
+}
+
 template<class Item>
 LinearList<Item>::~LinearList()
 {
@@ -101,27 +118,27 @@ Item& LinearList<Item>::operator[](const int& i)
 }
 
 template<class Item>
-bool LinearList<Item>::isEmpty()
+bool LinearList<Item>::isEmpty() const
 {
     return len == 0;
 }
 
 template<class Item>
-int LinearList<Item>::length()
+int LinearList<Item>::length() const
 {
     return len;
 }
 
 template<class Item>
-int LinearList<Item>::maxSize()
+int LinearList<Item>::maxSize() const
 {
     return MaxSize;
 }
 
 template<class Item>
-Item LinearList<Item>::returnListElement(const int k)
+const Item& LinearList<Item>::returnListElement(const int k) const
 {
-    if (k >= len || k < 0) {
+    if (k < len && k >= 0) {
         return element[k];
     } else {
         throw std::runtime_error("Requested element is not in LinearList.");
@@ -140,7 +157,7 @@ bool LinearList<Item>::find(const int k, Item& x)
 }
 
 template<class Item>
-int LinearList<Item>::search(Item& x)
+int LinearList<Item>::search(Item& x) const
 {
     for (int i = 0; i < len; i++) {
         if (element[i] == x) {
@@ -165,7 +182,7 @@ void LinearList<Item>::deleteElement(const int k, Item& x)
 template<class Item>
 void LinearList<Item>::insert(const int k, const Item& x)
 {
-    if (k < 0 || k >= MaxSize - 1) {
+    if (k < 0 || k > MaxSize - 1) {
         throw std::range_error("cannot insert at requested position");
     }
 

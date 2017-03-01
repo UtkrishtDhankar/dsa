@@ -49,24 +49,46 @@ void Sort<Item>::bubbleSort(LinearList<Item>& A, int low, int high)
                 swapped = true;
             }
         }
-
-        for (int i = 0; i < A.length(); i++) {
-            std::cout << A[i] << " ";
-        }
-        std::cout << std::endl;
     } while (swapped);
 }
 
 template<class Item>
 void Sort<Item>::rankSort(LinearList<Item>& A, int low, int high)
 {
-    
+    LinearList<Item> ranks(high - low);
+
+
+    for (int i = low; i < high; i++) {
+        ranks.insert(i - low, 0);
+        for (int j = low; j < high; j++) {
+            if (A[j] < A[i]) {
+                ranks[i - low]++;
+            }
+        }
+    }
+
+    LinearList<Item> copy = A;
+
+    for (int i = low; i < high; i++) {
+        A[ranks[i - low] + low] = copy[i];
+    }
 }
 
 template<class Item>
 void Sort<Item>::selectionSort(LinearList<Item>& A, int low, int high)
 {
-    
+    for (int i = low; i < high; i++) {
+        int minIndex = i;
+        for (int j = i + 1; j < high; j++) {
+            if (A[j] < A[minIndex]) {
+                minIndex = j;
+            }
+        }
+
+        Item temp = A[minIndex];
+        A[minIndex] = A[i];
+        A[i] = temp;
+    }
 }
 
 #endif
