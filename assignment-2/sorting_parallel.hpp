@@ -1,6 +1,8 @@
 #ifndef _SORTING_HPP
 #define _SORTING_HPP 1
 
+#include <thread>
+
 #include "seq_linear_list.hpp"
 
 namespace cs202 {
@@ -15,20 +17,22 @@ namespace cs202 {
       void quickSort(LinearList<T>& A, int low, int high);
   };
 
-  template<class Item>
-  void Sort<Item>::insertionSort(LinearList<Item>& A, int low, int high)
-  {
-    for (int i = low + 1; i < high; i++) {
-      Item currentItem = A[i];
+//   template<class Item>
+//   void Sort<I;
+//     int j = right - 1;
+// tem>::insertionSort(LinearList<Item>& A, int low, int high)
+//   {
+//     for (int i = low + 1; i < high; i++) {
+//       Item currentItem = A[i];
 
-      int j = i;
-      while (j > low && currentItem < A[j - 1]) {
-        A[j] = A[j - 1];
-        j--;
-      }
-      A[j] = currentItem;
-    }
-  }
+//       int j = i;
+//       while (j > low && currentItem < A[j - 1]) {
+//         A[j] = A[j - 1];
+//         j--;
+//       }
+//       A[j] = currentItem;
+//     }
+//   }
 
   template<class Item>
   void Sort<Item>::bubbleSort(LinearList<Item>& A, int low, int high)
@@ -138,17 +142,20 @@ namespace cs202 {
       Item pivot = A[high - 1];
 
       for (int i = low; i < high; i++) {
-      if (A[i] <= pivot) {
-      Item temp = A[i];
-      A[i] = A[wall];
-      A[wall] = temp;
-
-      wall++;
+        if (A[i] <= pivot) {
+          Item temp = A[i];
+          A[i] = A[wall];
+          A[wall] = temp;
+          wall++;
+        }
       }
-      }
 
-      quickSort(A, low, wall - 1);
-      quickSort(A, wall - 1, high);
+      std::thread qsort_thread1(&em>::quickSort, this, A, low, wall - 1);
+      std::thread qsort_thread2(&Sort<Item>::quickSort, this, A, wall - 1, high);
+
+      qsort_thread1.join(); qsort_thread2.join();
+      // quickSort(A, low, wall - 1);
+      // quickSort(A, wall - 1, high);
     }
   }
 }
