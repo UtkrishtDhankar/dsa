@@ -13,7 +13,7 @@
 #include <cstddef>
 #include <stdexcept>
 
-namespace /*your namespace here.*/
+namespace cs202
 {
 
 template<class T>
