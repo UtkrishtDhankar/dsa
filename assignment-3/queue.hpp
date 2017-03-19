@@ -38,7 +38,14 @@ public:
    * Also removes the front element from the queue.
    */
   T pop() {
+    if (this->first_ == nullptr) {
+      throw std::range_error("Can't dequeue, queue is empty!");
+    }
+
+    T data = this->first_->data_;
     this->remove(this->first_->data_);
+
+    return data;
   }
 
   /*
