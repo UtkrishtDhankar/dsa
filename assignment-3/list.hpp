@@ -129,12 +129,16 @@ class list
       if (found) {
         if (prev) {
           prev->next_ = cur->next_;
+        } else if (cur == first_) {
+          first_ = cur->next_;
         }
 
         if (cur) {
           delete cur;
         }
       }
+
+      size_--;
     }
 
     /*
@@ -144,13 +148,23 @@ class list
       node<T>* end = get_end();
       node<T>* cur = x.first_;
 
-      while (cur != nullptr) {
+      if (end == nullptr) {
         node<T>* new_node = new node<T>(cur->data_);
-        end->next = new_node;
+        first_ = new_node;
         end = new_node;
 
         cur = cur->next_;
       }
+
+      while (cur != nullptr) {
+        node<T>* new_node = new node<T>(cur->data_);
+        end->next_ = new_node;
+        end = new_node;
+
+        cur = cur->next_;
+      }
+
+      size_ += x.length();
     }
 
     T operator[](unsigned int i) {

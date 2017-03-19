@@ -14,6 +14,18 @@ int main()
       int number;
       std::cin >> number;
       l.append(number);
+    } else if (command == "appendlist") {
+      list<int> temp;
+      int size;
+      std::cin >> size;
+      for (int i = 0; i < size; i++) {
+        int num;
+        std::cin >> num;
+
+        temp.append(num);
+      }
+
+      l.append(temp);
     } else if (command == "print") {
       for (unsigned int i = 0; i < l.length(); i++) {
         std::cout << l[i] << " ";
