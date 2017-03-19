@@ -16,13 +16,13 @@ int main()
 
       q.push(num);
     } else if (command == "pop") {
-      std::cout << q.pop();
+      std::cout << q.pop() << std::endl;
     } else if (command == "front") {
-      std::cout << q.front();
+      std::cout << q.front() << std::endl;
     } else if (command == "size") {
-      std::cout << q.size();
+      std::cout << q.size() << std::endl;
     } else if (command == "empty") {
-      std::cout << q.empty();
+      std::cout << q.empty() << std::endl;
     } else {
       break;
     }
