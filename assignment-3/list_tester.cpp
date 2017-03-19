@@ -6,7 +6,7 @@
 
 int main()
 {
-  list<int> l;
+  cs202::list<int> l;
 
   std::string command;
   while (std::cin >> command) {

@@ -31,8 +31,7 @@ struct node {
 };
 
 template<class T>
-class list
-{
+class list {
   public:
     /*
      * Primary contructor.
@@ -57,7 +56,7 @@ class list
     /*
      * Frees all the memory acquired by the list.
      */
-    ~list() {
+    virtual ~list() {
       node<T>* cur = first_;
       while (cur != nullptr) {
         node<T>* next = cur->next_;
