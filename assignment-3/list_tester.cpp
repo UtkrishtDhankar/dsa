@@ -15,7 +15,7 @@ int main()
       std::cin >> number;
       l.append(number);
     } else if (command == "appendlist") {
-      list<int> temp;
+      cs202::list<int> temp;
       int size;
       std::cin >> size;
       for (int i = 0; i < size; i++) {

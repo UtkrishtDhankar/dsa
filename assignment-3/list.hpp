@@ -40,6 +40,7 @@ class list {
      */
     list() {
       first_ = nullptr;
+      end_ = nullptr;
       size_ = 0;
     }
 
@@ -50,6 +51,7 @@ class list {
     list(const list<T> & x) {
       size_ = 0;
       first_ = nullptr;
+      end_ = nullptr;
       append(x);
     }
 
@@ -74,8 +76,10 @@ class list {
 
       if (end) {
         end->next_ = new_node;
+        end_ = new_node;
       } else {
         first_ = new_node;
+        end_ = first_;
       }
 
       size_++;
@@ -103,6 +107,10 @@ class list {
       new_node->next_ = first_;
 
       first_ = new_node;
+
+      if (size_ == 0) {
+        end_ = new_node;
+      }
 
       size_++;
     }
@@ -133,6 +141,9 @@ class list {
         }
 
         if (cur) {
+          if (cur->next_ == nullptr) {
+            end_ = prev;
+          }
           delete cur;
         }
       }
@@ -159,6 +170,7 @@ class list {
         node<T>* new_node = new node<T>(cur->data_);
         end->next_ = new_node;
         end = new_node;
+        end_ = end;
 
         cur = cur->next_;
       }
@@ -181,15 +193,17 @@ class list {
 
   protected:
     node<T>* first_;
+    node<T>* end_;
     std::size_t size_;
 
     node<T>* get_end() {
-      node<T>* end = first_;
-      while (end != nullptr && end->next_ != nullptr) {
-        end = end->next_;
-      }
+      return end_;
+      // node<T>* end = first_;
+      // while (end != nullptr && end->next_ != nullptr) {
+      //   end = end->next_;
+      // }
 
-      return end;
+      // return end;
     }
 };
 }
