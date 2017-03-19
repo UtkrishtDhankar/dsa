@@ -12,6 +12,8 @@
 #ifndef STACK_HPP_
 #define STACK_HPP_
 
+#include <stdexcept>
+
 #include "list.hpp"
 
 namespace cs202
@@ -28,20 +30,20 @@ public:
     * Pushes t to on the top of the stack.
     */
   void push(const T& t) {
-    cons(t);
+    this->cons(t);
   }
   /*
     * Returns the element at the top of the stack.
     * Also removes the top element from the stack.
     */
   T pop() {
-    if (first_) {
-      T data = first_->data_;
-      remove(first_->data_);
+    if (this->first_) {
+      T data = this->first_->data_;
+      this->remove(this->first_->data_);
 
       return data;
     } else {
-      // TODO throw exception
+      throw std::range_error("Stack empty, can't pop.");
     }
   }
   /*
@@ -49,16 +51,16 @@ public:
     * Does not remove the top element.
     */
   T top() const {
-    if (!first_) {
-      // TODO throw exception
+    if (!this->first_) {
+      throw std::range_error("Stack empty, can't see top.");
     }
-    return first_->data_;
+    return this->first_->data_;
   }
   /*
     * Returns the number of elements currently in the stack.
     */
   int size() const {
-    return length();
+    return this->length();
   }
   /*
     * Returns a boolean indicating whether the stack is empty or not.
@@ -71,7 +73,9 @@ public:
     * Destructor
     * Fress the memory occupied by the stack elements.
     */
-  virtual ~stack();
+  virtual ~stack() {
+    // Don't need to do anything here, list cleans up for us
+  }
 };
 }
 
