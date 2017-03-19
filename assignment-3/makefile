@@ -10,7 +10,11 @@ STACK_SRC=stack_tester.cpp
 QUEUE_EXEC=queue
 QUEUE_SRC=queue_tester.cpp
 
-all: list stack queue
+PROBLEM_EXEC=problem
+PROBLEM_SRC=problem.cpp
+
+
+all: list stack queue problem
 
 debug: CFLAGS+= -g
 debug: all
@@ -24,9 +28,13 @@ stack:
 queue:
 	$(CC) $(CFLAGS) $(QUEUE_SRC) -o $(QUEUE_EXEC)
 
+problem:
+	$(CC) $(CFLAGS) $(PROBLEM_SRC) -o $(PROBLEM_EXEC)
+
 clean:
 	rm -rf *.dSYM
 	rm -f $(LIST_EXEC)
 	rm -f $(STACK_EXEC)
 	rm -f $(QUEUE_EXEC)
+	rm -f $(PROBLEM_EXEC)
 
