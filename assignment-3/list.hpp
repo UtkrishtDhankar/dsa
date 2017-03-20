@@ -210,12 +210,6 @@ protected:
 
   node<T>* get_end() {
     return end_;
-    // node<T>* end = first_;
-    // while (end != nullptr && end->next_ != nullptr) {
-    //   end = end->next_;
-    // }
-
-    // return end;
   }
 };
 }
