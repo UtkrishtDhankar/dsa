@@ -36,4 +36,4 @@ Invoke with `./queue`. An initially empty queue is present. The following comman
 * `empty` prints whether the queue is empty
 
 ### `problem`
-This implements a solution to problem 5 from the assignment.
+This implements a solution to problem 5 from the assignment. Invoke with `./problem` to see usage.
