@@ -45,6 +45,8 @@ int main()
     } else if (command == "remove") {
       int key;
       std::cin >> key;
+
+      map.remove(key);
     } else {
       break;
     }
