@@ -12,7 +12,7 @@ struct cs202::hash<int> {
 int main()
 {
   cs202::hash<int> hash_func;
-  cs202::OpenMap<int, int> map(hash_func);
+  cs202::OpenMap<int, int> map(4, hash_func);
 
   std::string command;
   while (std::cin >> command) {

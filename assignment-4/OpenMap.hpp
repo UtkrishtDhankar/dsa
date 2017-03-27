@@ -30,7 +30,10 @@ struct OpenMapData {
     filled = false;
   }
 
-  OpenMapData(const Key& k, const Value& v) : key(k), value(v) {}
+  OpenMapData(const Key& k, const Value& v) : key(k), value(v) {
+    deleted = false;
+    filled = false;
+  }
 
   bool operator==(const OpenMapData<Key, Value>& other) const {
     return (key == other.key && value == other.value && deleted = other.deleted && filled = other.filled);
@@ -86,7 +89,7 @@ public:
      * Creates an empty Open Map with the ability to hold atleast num Key value pairs.
      */
 	OpenMap(const int& num, hash<Key> hash_func) :
-    key_hash(hash_func), map(num, OpenMapData<Key, Value> ())
+    map(num, OpenMapData<Key, Value> ()), key_hash(hash_func)
   {
     num_filled = 0;
   }
@@ -117,10 +120,12 @@ public:
 	virtual bool has(const Key& key) {
     bool found = false;
 
-    for (auto it = map.begin(); it != map.end(); it++) {
-      if ((*it).key == key && (*it).filled && !(*it).deleted) {
-        found = true;
-        break;
+    int num_checked = 0;
+    int i = loc_for_key(key);
+    for(; num_checked < map.capacity(); i = (i + 1) % map.capacity(), num_checked++) {
+      if (map[i].key == key && map[i].filled && !map[i].deleted) {
+        found  = true;
+        break; // We've found a spot to put it in
       }
     }
 
