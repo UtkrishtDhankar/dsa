@@ -61,7 +61,19 @@ class DoubleHashMap  : public Dictionary<Key,Value>
      * Called when all the slots are full and a new element needs to be inserted.
      */
 	void rehash() {
-    // TODO
+    // get a copy of the map
+    auto copy = map;
+
+    num_filled = 0;
+
+    // create a new map
+    map = LinearList<DoubleHashMapData<Key, Value> > (2 * copy.size(), DoubleHashMapData<Key, Value> ());
+
+    for (auto elem : copy) {
+      if (elem.filled && !elem.deleted) {
+        put(elem.key, elem.value);
+      }
+    }
   }
 
   // Returns the location for a key
@@ -97,8 +109,11 @@ public:
      * Constructor: Double Hash Map
      * Creates a new Hash Table which is the exact copy of the given hash table.
      **/
-	DoubleHashMap(DoubleHashMap<Key, Value>& ht);
-  // TODO implement this
+	DoubleHashMap(DoubleHashMap<Key, Value>& ht) :
+    map(ht.map), key_hash(ht.key_hash), offset_hash(ht.offset_hash)
+  {
+    num_filled = 0;
+  }
 
     /*
      * Destructor
@@ -150,7 +165,21 @@ public:
    * Does nothing otherwise.
    */
 	virtual void remove(const Key& key) {
-    // TODO
+    bool found = false;
+
+    auto it = map.begin();
+    for (; it != map.end(); it++) {
+      if ((*it).key == key && (*it).filled && !(*it).deleted) {
+        found = true;
+        break;
+      }
+    }
+
+    if (found) {
+      (*it).deleted = true;
+      (*it).key = Key();
+      (*it).value = Value();
+    }
   }
 
   /*
