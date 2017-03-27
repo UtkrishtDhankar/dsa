@@ -42,7 +42,7 @@ class ChainedMap  : public Dictionary<Key,Value>
 
   static const size_t default_size = 101;
   LinearList<list<ChainedMapData<Key, Value> > > table;
-  std::hash<Key> key_hash;
+  hash<Key> key_hash;
 
 
 public:
@@ -51,7 +51,8 @@ public:
      * Creates a Chained Hash Table with some default size.
      * NOTE: Please try to ensure that the size is a prime number for better performance.
      */
-	ChainedMap() : table(default_size) {
+	ChainedMap(hash<Key> hash_functor) : table(default_size) {
+    key_hash = hash_functor;
     // Empty linked lists have been created in each element of the table
   }
     /*
@@ -59,7 +60,8 @@ public:
      * Creates an empty Chained Map with the ability to hold atleast num Key value pairs.
      */
 
-	ChainedMap(const int& num) : table(num) {
+	ChainedMap(const int& num, hash<Key> hash_functor) : table(num) {
+    key_hash = hash_functor;
     // A table of size num has been created. It's up to the user to provide a size that's
     // performance efficient.
   }
