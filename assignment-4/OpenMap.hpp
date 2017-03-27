@@ -55,7 +55,6 @@ private:
     // TODO make this
   }
 
-  LinearList<OpenMapData<Key, Value> > map;
 
   // Returns the location for a key
   int loc_for_key(Key key) const {
@@ -63,6 +62,7 @@ private:
   }
 
   const size_t default_size = 101;
+  LinearList<OpenMapData<Key, Value> > map;
   hash<Key> key_hash;
 
   unsigned int num_filled;
@@ -76,9 +76,8 @@ public:
      * NOTE: Please try to ensure that the size is a prime number for better performance.
      */
 	OpenMap(hash<Key> hash_func) :
-     key_hash(hash_func)
+    map(default_size, OpenMapData<Key, Value> ()), key_hash(hash_func)
   {
-    map = LinearList<OpenMapData<Key, Value> >(default_size, OpenMapData<Key, Value> ());
     num_filled = 0;
   }
 
@@ -87,9 +86,8 @@ public:
      * Creates an empty Open Map with the ability to hold atleast num Key value pairs.
      */
 	OpenMap(const int& num, hash<Key> hash_func) :
-    key_hash(hash_func)
+    key_hash(hash_func), map(num, OpenMapData<Key, Value> ())
   {
-    map = LinearList<OpenMapData<Key, Value> >(num, OpenMapData<Key, Value> ());
     num_filled = 0;
   }
 
