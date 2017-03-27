@@ -61,7 +61,7 @@ private:
     return key_hash(key) % map.capacity();
   }
 
-  const size_t default_size = 101;
+  static constexpr size_t default_size = 101;
   LinearList<OpenMapData<Key, Value> > map;
   hash<Key> key_hash;
 
@@ -220,6 +220,9 @@ public:
     return get(key);
   }
 };
+
+template<class Key, class Value>
+constexpr size_t OpenMap<Key, Value>::default_size;
 }
 
 #endif
