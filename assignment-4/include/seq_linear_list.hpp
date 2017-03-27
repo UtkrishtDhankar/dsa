@@ -140,7 +140,7 @@ template<typename T>
 
   template<typename T>
   LinearList<T>::~LinearList() {
-    delete buffer_;
+    delete[] buffer_;
   }
 
   template<typename T>
