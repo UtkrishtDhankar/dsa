@@ -79,6 +79,16 @@ public:
     }
   }
 
+  void operator=(const list<T>& other) {
+    node<T>* cur = first_;
+    while (cur != nullptr) {
+      node<T>* next = cur->next_;
+      delete cur;
+      cur = next;
+    }
+    append(other);
+  }
+
   /*
     * adds value at the end of the list.
     */
@@ -167,6 +177,10 @@ public:
     * Appends the given list x at the end of the current list.
     */
   void append(const list<T>& x) {
+    if (x.empty()) {
+      return;
+    }
+
     node<T>* end = get_end();
     node<T>* cur = x.first_;
 

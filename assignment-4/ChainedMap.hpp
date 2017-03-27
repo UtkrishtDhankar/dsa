@@ -10,15 +10,16 @@
 #include "include/list.hpp"
 #include "include/seq_linear_list.hpp"
 
-#include <functional>
 #include <stdexcept>
+#include <iostream>
 
 namespace cs202
 {
 
 template<class Key, class Value>
 struct ChainedMapData {
-  ChainedMapData() {}
+  ChainedMapData() {key = Key(); value = Value();}
+  ChainedMapData(const ChainedMapData<Key, Value>& other) {key = other.key; value = other.value;}
   ChainedMapData(const Key& k, const Value& v) : key(k), value(v) {}
 
   bool operator==(const ChainedMapData<Key, Value>& other) const {return (key == other.key && value == other.value);}
@@ -32,7 +33,7 @@ class ChainedMap  : public Dictionary<Key,Value>
 {
   // Returns the location for a key
   int loc_for_key(Key key) const {
-    return key_hash(key) % table.size();
+    return key_hash(key) % table.capacity();
   }
 
   const size_t default_size = 101;
@@ -46,7 +47,7 @@ public:
      * Creates a Chained Hash Table with some default size.
      * NOTE: Please try to ensure that the size is a prime number for better performance.
      */
-	ChainedMap(hash<Key> hash_functor) : table(default_size) {
+	ChainedMap(hash<Key> hash_functor) : table(default_size, list<ChainedMapData<Key, Value> >()) {
     key_hash = hash_functor;
     // Empty linked lists have been created in each element of the table
   }
@@ -55,7 +56,7 @@ public:
      * Creates an empty Chained Map with the ability to hold atleast num Key value pairs.
      */
 
-	ChainedMap(const int& num, hash<Key> hash_functor) : table(num) {
+	ChainedMap(const int& num, hash<Key> hash_functor) : table(num, list<ChainedMapData<Key, Value> >()){
     key_hash = hash_functor;
     // A table of size num has been created. It's up to the user to provide a size that's
     // performance efficient.
@@ -93,9 +94,8 @@ public:
       // This requires that value has a default constructor
       // won't work for everything.
       put(key, Value());
-    } else {
-      return get(key);
     }
+    return get(key);
   }
 
   /*
@@ -149,11 +149,9 @@ public:
 	virtual Value& get(const Key& key) {
     int loc = loc_for_key(key);
 
-    list<ChainedMapData<Key, Value> > list_to_search = table[loc];
-
     bool found = false;
-    auto it = list_to_search.begin();
-    for (; it != list_to_search.end(); it++) {
+    auto it = table[loc].begin();
+    for (; it != table[loc].end(); it++) {
       if ((*it).key == key) {
         found = true;
         break;
@@ -175,12 +173,10 @@ public:
 	virtual void put(const Key& key, const Value& value) {
     int loc = loc_for_key(key);
 
-    list<ChainedMapData<Key, Value> > list_to_search = table[loc];
-
     bool contains_pair = false;
     bool contains_key_only = false;
-    auto it = list_to_search.begin();
-    for (; it != list_to_search.end(); it++) {
+    auto it = table[loc].begin();
+    for (; it != table[loc].end(); it++) {
       if ((*it).key == key) {
         if ((*it).value == value) {
           contains_pair = true;
@@ -196,7 +192,7 @@ public:
     } else if (contains_pair) {
       // Do nothing, we already have all the things
     } else {
-      list_to_search.cons(ChainedMapData<Key, Value>(key, value));
+      table[loc].cons(ChainedMapData<Key, Value>(key, value));
     }
   }
 };
