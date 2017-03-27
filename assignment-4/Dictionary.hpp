@@ -5,6 +5,14 @@
 #ifndef DICTIONARY_HPP_
 #define DICTIONARY_HPP_
 
+namespace cs202 {
+
+// Specialise this and provide as a hash to the Dictionary
+template <class T>
+struct hash {
+  unsigned long long operator() (T val);
+};
+
 template<class Key, class Value>
 class Dictionary
 {
@@ -38,6 +46,7 @@ public:
      */
 	virtual void put(const Key& key, const Value& value) = 0;
 };
+}
 
 
 #endif /* DICTIONARY_HPP_ */
