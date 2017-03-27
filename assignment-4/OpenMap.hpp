@@ -151,6 +151,7 @@ public:
    * Does nothing otherwise.
    */
 	virtual void remove(const Key& key) {
+    // TODO make this searching better
     bool found = false;
 
     auto it = map.begin();
@@ -176,8 +177,7 @@ public:
 	virtual Value& get(const Key& key) {
     bool found = false;
 
-    // int i = loc_for_key(key);
-    int i = 0;
+    int i = loc_for_key(key);
     int num_checked = 0;
 
     for(; num_checked < map.capacity(); i = (i + 1) % map.capacity(), num_checked++) {

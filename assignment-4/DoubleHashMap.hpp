@@ -190,8 +190,7 @@ public:
 	virtual Value& get(const Key& key) {
     bool found = false;
 
-    // int i = loc_for_key(key);
-    int i = 0;
+    int i = loc_for_key(key);
     int num_checked = 0;
 
     for(; num_checked < map.capacity(); i = (i + get_offset(key)) % map.capacity(), num_checked++) {
