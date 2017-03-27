@@ -13,7 +13,10 @@ OPEN_SRC=OpenMapDriver.cpp
 DOUBLE_EXEC=double
 DOUBLE_SRC=DoubleHashMapDriver.cpp
 
-all: chained list open double
+LRU_EXEC=lru
+LRU_SRC=lru.cpp
+
+all: chained list open double lru
 
 debug: CFLAGS+= -g
 debug: all
@@ -30,9 +33,14 @@ open:
 double:
 	$(CC) $(CFLAGS) $(DOUBLE_SRC) -o $(DOUBLE_EXEC)
 
+lru:
+	$(CC) $(CFLAGS) $(LRU_SRC) -o $(LRU_EXEC)
+
+
 clean:
 	rm -rf *.dSYM
 	rm -f $(CHAINED_EXEC)
 	rm -f $(LIST_EXEC)
 	rm -f $(OPEN_EXEC)
 	rm -f $(DOUBLE_EXEC)
+	rm -f $(LRU_EXEC)
