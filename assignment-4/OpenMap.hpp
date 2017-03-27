@@ -8,6 +8,7 @@
 #define OPENMAP_HPP_
 
 #include <stdexcept>
+#include <iostream>
 
 #include "Dictionary.hpp"
 #include "include/seq_linear_list.hpp"
@@ -26,8 +27,8 @@ struct OpenMapData {
   OpenMapData(const OpenMapData<Key, Value>& other) {
     key = other.key;
     value = other.value;
-    deleted = false;
-    filled = false;
+    deleted = other.deleted;
+    filled = other.filled;
   }
 
   OpenMapData(const Key& k, const Value& v) : key(k), value(v) {
@@ -49,26 +50,38 @@ template<class Key, class Value>
 class OpenMap  : public Dictionary<Key,Value>
 {
 private:
+  static constexpr size_t default_size = 101;
+  LinearList<OpenMapData<Key, Value> > map;
+  hash<Key> key_hash;
+
+  unsigned int num_filled;
+
     /*
      * Function rehash:
      * Resizes the has table to the next convenient size.
      * Called when all the slots are full and a new element needs to be inserted.
      */
 	void rehash() {
-    // TODO make this
-  }
+    // get a copy of the map
+    auto copy = map;
 
+    num_filled = 0;
+
+    // create a new map
+    map = LinearList<OpenMapData<Key, Value> > (2 * copy.size(), OpenMapData<Key, Value> ());
+
+    for (auto elem : copy) {
+      if (elem.filled && !elem.deleted) {
+        put(elem.key, elem.value);
+      }
+    }
+  }
 
   // Returns the location for a key
   int loc_for_key(Key key) const {
     return key_hash(key) % map.capacity();
   }
 
-  static constexpr size_t default_size = 101;
-  LinearList<OpenMapData<Key, Value> > map;
-  hash<Key> key_hash;
-
-  unsigned int num_filled;
 
 
 public:
@@ -163,9 +176,12 @@ public:
 	virtual Value& get(const Key& key) {
     bool found = false;
 
-    auto it = map.begin();
-    for (; it != map.end(); it++) {
-      if ((*it).key == key && (*it).filled && !(*it).deleted) {
+    // int i = loc_for_key(key);
+    int i = 0;
+    int num_checked = 0;
+
+    for(; num_checked < map.capacity(); i = (i + 1) % map.capacity(), num_checked++) {
+      if (map[i].key == key && map[i].filled && !map[i].deleted) {
         found = true;
         break;
       }
@@ -175,7 +191,7 @@ public:
       throw std::invalid_argument("Key not found in dictionary.");
     }
 
-    return (*it).value;
+    return map[i].value;
   }
 
   /*
@@ -204,6 +220,7 @@ public:
     map[i].key = key;
     map[i].value = value;
     map[i].filled = true;
+    num_filled++;
   }
 
     /*

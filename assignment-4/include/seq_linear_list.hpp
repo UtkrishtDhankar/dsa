@@ -37,6 +37,8 @@ template<typename T>
       // Return the element in the list at position k
       inline const T& at(const int& k) const {return buffer_[k];}
 
+      inline T copy_at(const int& k) const {return buffer_[k];}
+
       // Appending an element to the LinearList
       // The asymptotic time complexity of this function
       // should be O(1)
@@ -136,7 +138,7 @@ template<typename T>
 
     buffer_ = new T[capacity_];
     for (int i = 0; i < size_; i++) {
-      buffer_[i] = other.at(i);
+      buffer_[i] = other.copy_at(i);
     }
   }
 
