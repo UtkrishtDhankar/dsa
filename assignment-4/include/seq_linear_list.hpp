@@ -85,8 +85,10 @@ template<typename T>
 					T& operator*(){return *elem_;}
           void operator=(T *ptr){elem_ = ptr;}
           void operator=(iterator iter){elem_ = iter.elem_;}
-          void operator++(){elem_++;}
-          void operator--(){elem_--;};
+          iterator& operator++(){elem_++; return *this;}
+          iterator operator++(int){iterator it = *this; elem_++; return it;}
+          iterator& operator--(){elem_--; return *this;}
+          iterator operator--(int){iterator it = *this; elem_--; return it;}
           bool operator!=(T* ptr){return (elem_ != ptr);};
           bool operator==(T* ptr){return (elem_ == ptr);}
           bool operator!=(iterator iter){return (elem_ != iter.elem_);}
