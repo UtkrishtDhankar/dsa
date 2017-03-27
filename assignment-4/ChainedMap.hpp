@@ -21,6 +21,8 @@ struct ChainedMapData {
   ChainedMapData() {}
   ChainedMapData(const Key& k, const Value& v) : key(k), value(v) {}
 
+  bool operator==(const ChainedMapData<Key, Value>& other) const {return (key == other.key && value == other.value);}
+
   Key key;
   Value value;
 };
@@ -28,19 +30,12 @@ struct ChainedMapData {
 template<class Key, class Value>
 class ChainedMap  : public Dictionary<Key,Value>
 {
-    /*
-     * Function rehash:
-     * Resizes the hash table to the next convenient size.
-     * Called when all the slots are full and a new element needs to be inserted.
-     */
-	void rehash();
-
   // Returns the location for a key
-  int loc_for_key(Key key) {
+  int loc_for_key(Key key) const {
     return key_hash(key) % table.size();
   }
 
-  static const size_t default_size = 101;
+  const size_t default_size = 101;
   LinearList<list<ChainedMapData<Key, Value> > > table;
   hash<Key> key_hash;
 
@@ -108,7 +103,7 @@ public:
    * Returns true if the dictionay contains the key
    * false otherwise. It is search operation
    */
-	virtual bool has(const Key& key) const {
+	virtual bool has(const Key& key) {
     int loc = loc_for_key(key);
 
     list<ChainedMapData<Key, Value> > list_to_search = table[loc];
@@ -135,7 +130,7 @@ public:
     bool found = false;
     auto it = table[loc].begin();
     for (;it != table[loc].end(); it++) {
-      if (it->key == key) {
+      if ((*it).key == key) {
         found = true;
         break;
       }
@@ -159,14 +154,14 @@ public:
     bool found = false;
     auto it = list_to_search.begin();
     for (; it != list_to_search.end(); it++) {
-      if (it->key == key) {
+      if ((*it).key == key) {
         found = true;
         break;
       }
     }
 
     if (found) {
-      return *it;
+      return (*it).value;
     } else {
       throw std::invalid_argument("Given key does not exist.");
     }
@@ -186,8 +181,8 @@ public:
     bool contains_key_only = false;
     auto it = list_to_search.begin();
     for (; it != list_to_search.end(); it++) {
-      if (it->key == key) {
-        if (it->value == value) {
+      if ((*it).key == key) {
+        if ((*it).value == value) {
           contains_pair = true;
         } else {
           contains_key_only = true;
@@ -197,7 +192,7 @@ public:
     }
 
     if (contains_key_only) {
-      it->value = value;
+      (*it).value = value;
     } else if (contains_pair) {
       // Do nothing, we already have all the things
     } else {

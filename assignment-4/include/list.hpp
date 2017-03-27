@@ -166,7 +166,7 @@ public:
   /*
     * Appends the given list x at the end of the current list.
     */
-  void append(list<T>& x) {
+  void append(const list<T>& x) {
     node<T>* end = get_end();
     node<T>* cur = x.first_;
 
@@ -210,10 +210,11 @@ public:
     iterator() {elem_ = nullptr;}
     iterator(node<T>* ptr) {elem_ = ptr;}
     ~iterator(){}
-    node<T>& operator*(){return elem_->data;}
+    T& operator*(){return elem_->data_;}
     void operator=(node<T> *ptr){elem_ = ptr;}
     void operator=(iterator iter){elem_ = iter.elem_;}
-    void operator++(){elem_ = elem_->next;}
+    iterator& operator++(){elem_ = elem_->next_; return *this;}
+    iterator operator++(int){iterator it = *this; elem_ = elem_->next_; return it;}
     bool operator!=(node<T>* ptr){return (elem_ != ptr);};
     bool operator==(node<T>* ptr){return (elem_ == ptr);}
     bool operator!=(iterator iter){return (elem_ != iter.elem_);}

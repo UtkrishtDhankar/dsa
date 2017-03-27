@@ -10,7 +10,7 @@ namespace cs202 {
 // Specialise this and provide as a hash to the Dictionary
 template <class T>
 struct hash {
-  unsigned long long operator() (T val);
+  unsigned long long operator() (T val) const;
 };
 
 template<class Key, class Value>
@@ -26,7 +26,7 @@ public:
      * Returns true if the dictionay contains the key
      * false otherwise. It is search operation
      */
-	virtual bool has(const Key& key) const = 0;
+	virtual bool has(const Key& key) = 0;
     /*
      * Function : remove
      * Removes the given key and the corresponding value from the Dictionary if the key is in the dictionary.

@@ -43,13 +43,13 @@ template<typename T>
       void push_back(const T& item);
 
       // Returns true if LinearList is empty
-      bool empty();
+      bool empty() const;
 
       // Returns the size of the LinearList
-      size_t size();
+      size_t size() const;
 
       // Returns the capacity of the LinearList
-      size_t capacity();
+      size_t capacity() const;
 
       // Fills all the elements with a default value
       void fill(const T& item);
@@ -144,17 +144,17 @@ template<typename T>
   }
 
   template<typename T>
-  bool LinearList<T>::empty() {
+  bool LinearList<T>::empty() const {
     return (size_ == 0);
   }
 
   template<typename T>
-  size_t LinearList<T>::size() {
+  size_t LinearList<T>::size() const {
     return size_;
   }
 
   template<typename T>
-  size_t LinearList<T>::capacity() {
+  size_t LinearList<T>::capacity() const {
     return capacity_;
   }
 
