@@ -10,13 +10,16 @@ LIST_SRC=ListMapDriver.cpp
 OPEN_EXEC=open
 OPEN_SRC=OpenMapDriver.cpp
 
+OPEN_STRING_EXEC=open_str
+OPEN_STRING_SRC=OpenMapStringDriver.cpp
+
 DOUBLE_EXEC=double
 DOUBLE_SRC=DoubleHashMapDriver.cpp
 
 LRU_EXEC=lru
 LRU_SRC=lru.cpp
 
-all: chained list open double lru
+all: chained list open double lru open_str
 
 debug: CFLAGS+= -g
 debug: all
@@ -30,6 +33,10 @@ list:
 open:
 	$(CC) $(CFLAGS) $(OPEN_SRC) -o $(OPEN_EXEC)
 
+open_str:
+	$(CC) $(CFLAGS) $(OPEN_STRING_SRC) -o $(OPEN_STRING_EXEC)
+
+
 double:
 	$(CC) $(CFLAGS) $(DOUBLE_SRC) -o $(DOUBLE_EXEC)
 
@@ -42,5 +49,6 @@ clean:
 	rm -f $(CHAINED_EXEC)
 	rm -f $(LIST_EXEC)
 	rm -f $(OPEN_EXEC)
+	rm -f $(OPEN_STRING_EXEC)
 	rm -f $(DOUBLE_EXEC)
 	rm -f $(LRU_EXEC)
