@@ -127,6 +127,14 @@ public:
       map.cons(ListMapData<Key, Value>(key, value));
     }
   }
+
+	Value& operator[](const Key& key) {
+    if (!has(key)) {
+      put(key, Value());
+    }
+
+    return get(key);
+  }
 };
 }
 
