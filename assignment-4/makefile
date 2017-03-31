@@ -4,6 +4,9 @@ CFLAGS=-std=c++11 -Wall -Werror
 CHAINED_EXEC=chained
 CHAINED_SRC=ChainedMapDriver.cpp
 
+CHAINED_STRING_EXEC=chained_str
+CHAINED_STRING_SRC=ChainedMapStringDriver.cpp
+
 LIST_EXEC=list
 LIST_SRC=ListMapDriver.cpp
 
@@ -22,13 +25,16 @@ DOUBLE_STRING_SRC=DoubleHashMapStringDriver.cpp
 LRU_EXEC=lru
 LRU_SRC=lru.cpp
 
-all: chained list open double lru open_str double_str
+all: chained list open double lru open_str double_str chained_str
 
 debug: CFLAGS+= -g
 debug: all
 
 chained:
 	$(CC) $(CFLAGS) $(CHAINED_SRC) -o $(CHAINED_EXEC)
+
+chained_str:
+	$(CC) $(CFLAGS) $(CHAINED_STRING_SRC) -o $(CHAINED_STRING_EXEC)
 
 list:
 	$(CC) $(CFLAGS) $(LIST_SRC) -o $(LIST_EXEC)
@@ -52,6 +58,7 @@ lru:
 clean:
 	rm -rf *.dSYM
 	rm -f $(CHAINED_EXEC)
+	rm -f $(CHAINED_STRING_EXEC)
 	rm -f $(LIST_EXEC)
 	rm -f $(OPEN_EXEC)
 	rm -f $(OPEN_STRING_EXEC)
