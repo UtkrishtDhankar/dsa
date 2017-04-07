@@ -40,6 +40,16 @@ class BinaryTree
 
      int size = -1;
 
+     bool has_child_with_key(BinaryNode<Key, Value>* node, Key k) {
+         if (node == nullptr) {
+             return false;
+         } else if (node->key == k) {
+             return true;
+         } else {
+             return has_child_with_key(node->left, k) || has_child_with_key(node->right, k);
+         }
+     }
+  
      BinaryNode<Key, Value>* get_node_to_insert_at() {
           BinaryNode<Key, Value>* node_to_insert_at = root;
 
@@ -90,8 +100,7 @@ public:
      * otherwise return false.
      */
      virtual bool has(const Key& key) {
-          // TODO implement
-          return false;
+         return has_child_with_key(root, key);
      }
 
     /* Implement put function such that newly inserted node keep the tree balanced.
