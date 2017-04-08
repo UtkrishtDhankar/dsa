@@ -226,8 +226,6 @@ public:
 /* Implement put function such that newly inserted node keep the tree balanced.
     */
     virtual void put(const Key& key, const Value& value) {
-        // TODO check if tree already has key. If so, set node to that value
-
         if(auto existing_node = has_child_with_key(root, key)) {
             existing_node->val = value;
             return;
