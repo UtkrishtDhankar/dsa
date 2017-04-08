@@ -171,10 +171,10 @@ public:
         if (node) {
             if (!node->left) {
                 node->left = new BinaryNode<Key, Value>(key, value, root, node);
-                node = node->left;
+                node->left->parent = node;
             } else {
                 node->right = new BinaryNode<Key, Value>(key, value, root, node);
-                node = node->right;
+                node->right->parent = node;
             }
         } else {
             node = new BinaryNode<Key, Value>(key, value, nullptr, node);
