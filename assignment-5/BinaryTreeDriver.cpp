@@ -23,6 +23,12 @@ int main() {
             std::cin >> key;
 
             std::cout << bt.has(key) << std::endl;
+        } else if (command == "preorder") {
+            bt.print_pre_order();
+        } else if (command == "inorder") {
+            bt.print_in_order();
+        } else if (command == "postorder") {
+            bt.print_post_order();
         }
     }
 }

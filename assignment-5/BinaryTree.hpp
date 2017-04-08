@@ -1,6 +1,9 @@
 #ifndef BINARYTREE_HPP
 #define BINARYTREE_HPP
 
+#include <iostream>
+#include <stdexcept>
+
 namespace cs202 {
 
 template <class Key, class Value>
@@ -38,8 +41,6 @@ class BinaryTree
 	/* You can implement your own helper functions whenever required.
 	 */
 
-     int size = -1;
-
      bool has_child_with_key(BinaryNode<Key, Value>* node, Key k) {
          if (node == nullptr) {
              return false;
@@ -49,29 +50,87 @@ class BinaryTree
              return has_child_with_key(node->left, k) || has_child_with_key(node->right, k);
          }
      }
+
+    // Only to be called if the tree is already guaranteed to have this key
+    Value get_descendant_with_value_key(BinaryNode<Key, Value>* node, Key k) {
+        if (node->key == k) {
+            return node->val;
+        }
+    }
+
+    Key find_descendant_with_min_key(BinaryNode<Key, Value>* node) {
+        Key min = node->key;
+        if (node->left) {
+            Key left_min = find_descendant_with_min_key(node->left);
+            if (left_min < min) {
+                min = left_min;
+            }
+        }
+
+        if (node->right) {
+            Key right_min = find_descendant_with_min_key(node->right);
+            if (right_min < min) {
+                min = right_min;
+            }
+        }
+
+        return min;
+    }
   
-     BinaryNode<Key, Value>* get_node_to_insert_at() {
-          BinaryNode<Key, Value>* node_to_insert_at = root;
+    inline bool get_ith_bit(int num, int i) {
+        return (num >> i & 1);
+    }
 
-          if (size > -1) {
-               unsigned char first_non_zero_bit = 31;
+    int current_level = -1; // What level nodes is completely full? At the start, no level is full, so -1
+    int nodes_in_next_level = 0; // How many nodes are full in the next level?
+    
+    BinaryNode<Key, Value>* get_node_to_insert_at() {
+        BinaryNode<Key, Value>* node_to_insert_at = root;
 
-               while (!((1 << first_non_zero_bit) & (size >> first_non_zero_bit)) && first_non_zero_bit)
-                    first_non_zero_bit--;
+        if (current_level == -1) {
+            current_level = 0;
+            return root;
+        }
 
-               int num_bits_left = first_non_zero_bit;
-               while (num_bits_left > 0) {
-                    if ((1 << num_bits_left) & (size >> num_bits_left)) {
-                         node_to_insert_at = node_to_insert_at->right;
-                    } else {
-                         node_to_insert_at = node_to_insert_at->left;
-                    }
+        for (int counter = current_level; counter > 0; counter--) {
+            if (get_ith_bit(nodes_in_next_level, counter + 1)) {
+                node_to_insert_at = node_to_insert_at->right;
+            } else {
+                node_to_insert_at = node_to_insert_at->left;
+            }
+        }
 
-                    num_bits_left--;
-               }
-          }
+        nodes_in_next_level++;
+        if (nodes_in_next_level >= (1 << (current_level+ 1))) {
+            current_level++;
+            nodes_in_next_level = 0;
+        } 
 
-          return node_to_insert_at;
+        return node_to_insert_at;
+     }
+
+     void print_node_in_order(BinaryNode<Key, Value>* node) {
+         if (node) {
+             print_node_in_order(node->left);
+             std::cout << node->key << ": " << node->val << std::endl;
+             print_node_in_order(node->right);
+         }
+     }
+
+     void print_node_post_order(BinaryNode<Key, Value>* node) {
+         if (node) {
+             print_node_post_order(node->left);
+             print_node_post_order(node->right);
+             std::cout << node->key << ": " << node->val << std::endl;
+         }
+     }
+
+     void print_node_pre_order(BinaryNode<Key, Value>* node) {
+         if (node) {
+             std::cout << node->key << ": " << node->val << std::endl;
+             print_node_pre_order(node->left);
+             print_node_pre_order(node->right);
+         }
      }
 
 protected:
@@ -79,113 +138,111 @@ protected:
 
 public:
 
-     BinaryTree() {
-          root = nullptr;
-     }
+    BinaryTree() {
+        root = nullptr;
+    }
 
-    /* Implement get function to retrieve the value corresponding to given key in binary tree.
-     */
-     Value get(const Key& key) {
-          // TODO implement
-          return Key();
-     }
+/* Implement get function to retrieve the value corresponding to given key in binary tree.
+    */
+    Value get(const Key& key) {
+        
+    }
 
-    /* Implement remove function that can delete a node in binary tree with given key.
-     */
-     virtual void remove(const Key& key) {
-          
-     }
+/* Implement remove function that can delete a node in binary tree with given key.
+    */
+    virtual void remove(const Key& key) {
+        
+    }
 
-    /* Implement has function which will return true if the given key is present in binary tree
-     * otherwise return false.
-     */
-     virtual bool has(const Key& key) {
-         return has_child_with_key(root, key);
-     }
+/* Implement has function which will return true if the given key is present in binary tree
+    * otherwise return false.
+    */
+    virtual bool has(const Key& key) {
+        return has_child_with_key(root, key);
+    }
 
-    /* Implement put function such that newly inserted node keep the tree balanced.
-     */
-     virtual void put(const Key& key, const Value& value) {
-          // TODO check if tree already has key. If so, set node to that value
+/* Implement put function such that newly inserted node keep the tree balanced.
+    */
+    virtual void put(const Key& key, const Value& value) {
+        // TODO check if tree already has key. If so, set node to that value
 
-          auto node = get_node_to_insert_at();
+        auto node = get_node_to_insert_at();
 
-          if (node) {
-               if (!node->left) {
-                    node->left = new BinaryNode<Key, Value>(key, value, root, node);
-                    node = node->left;
-               } else {
-                    node->right = new BinaryNode<Key, Value>(key, value, root, node);
-                    node = node->right;
-               }
-          } else {
-               node = new BinaryNode<Key, Value>(key, value, nullptr, node);
-               node->root = node;
-               root = node;
-          }
+        if (node) {
+            if (!node->left) {
+                node->left = new BinaryNode<Key, Value>(key, value, root, node);
+                node = node->left;
+            } else {
+                node->right = new BinaryNode<Key, Value>(key, value, root, node);
+                node = node->right;
+            }
+        } else {
+            node = new BinaryNode<Key, Value>(key, value, nullptr, node);
+            node->root = node;
+            root = node;
+        }
+    }
 
-          size++;
-     }
+/*
+    * This method print all the key value pairs of the binary tree, as
+    * observed in an in order traversal.
+    */
+    virtual void print_in_order() {
+        print_node_in_order(root);        
+    }
 
-    /*
-     * This method print all the key value pairs of the binary tree, as
-     * observed in an in order traversal.
-     */
-     virtual void print_in_order() {
-          
-     }
+/*
+    * This method print all the key value pairs of the binary tree, as
+    * observed in an pre order traversal.
+    */
+    virtual void print_pre_order() {
+       print_node_pre_order(root); 
+    }
 
-    /*
-     * This method print all the key value pairs of the binary tree, as
-     * observed in an pre order traversal.
-     */
-     virtual void print_pre_order() {
-          
-     }
-
-    /*
-     * This method print all the key value pairs of the binary tree, as
-     * observed in a post order traversal.
-     */
-     virtual void print_post_order() {
-          
-     }
+/*
+    * This method print all the key value pairs of the binary tree, as
+    * observed in a post order traversal.
+    */
+    virtual void print_post_order() {
+        print_node_post_order(root); 
+    }
 
     /*
      * This method returns the minimum element in the binary tree.
      */
-     virtual Key minimum() {
-          
-          // TODO implement
-          return Key();
-          
-     }
+    virtual Key minimum() {
+        if (!root) {
+            throw std::range_error("Can't find minimum of an empty tree.");
+        }
+
+        return find_descendant_with_min_key(root); 
+    }
 
     /*
      * This method returns the maximum element in the binary tree.
      */
-     virtual Key maximum() {
-          // TODO implement
-          return Key();
-     }
+    virtual Key maximum() {
+        // TODO implement
+        return Key();
+    }
 
     /*
      * This method returns the successor, i.e, the next larget element in the
      * binary tree, after Key.
      */
-     virtual Key successor(const Key& key) {
-          // TODO implement
-          return Key();
-     }
+    virtual Key successor(const Key& key) {
+        // TODO implement
+        return Key();
+    }
 
     /*
      * This method returns the predessor, ie, the next smallest element in the
      * binary tree, after Key.
      */
-     virtual Key predecessor(const Key& key) {
-          // TODO implement
-          return Key();
-     }
+    virtual Key predecessor(const Key& key) {
+        // TODO implement
+        return Key();
+    }
 };
 
 }
