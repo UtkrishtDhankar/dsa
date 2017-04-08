@@ -6,7 +6,6 @@
 int main() {
     cs202::BinaryTree<int, int> bt;
 
-
     std::string command;
     while (std::cin >> command) {
         if (command == "put") {
@@ -33,6 +32,11 @@ int main() {
             std::cout << bt.maximum() << std::endl;
         } else if (command == "min") {
             std::cout << bt.minimum() << std::endl;
+        } else if (command == "successor") {
+            int key;
+            std::cin >> key;
+
+            std::cout << bt.successor(key) << std::endl;
         }
     }
 }
