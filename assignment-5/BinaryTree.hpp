@@ -41,13 +41,22 @@ class BinaryTree
 	/* You can implement your own helper functions whenever required.
 	 */
 
-     bool has_child_with_key(BinaryNode<Key, Value>* node, Key k) {
+     BinaryNode<Key, Value>* has_child_with_key(BinaryNode<Key, Value>* node, Key k) {
          if (node == nullptr) {
-             return false;
+             return nullptr;
          } else if (node->key == k) {
-             return true;
+             return node;
          } else {
-             return has_child_with_key(node->left, k) || has_child_with_key(node->right, k);
+             BinaryNode<Key, Value>* left = has_child_with_key(node->left, k);
+             BinaryNode<Key, Value>* right = has_child_with_key(node->right, k);
+
+             if (left) {
+                 return left;
+             } else if (right) {
+                 return right;
+             } else {
+                 return nullptr;
+             }
          }
      }
 
@@ -184,6 +193,11 @@ public:
     */
     virtual void put(const Key& key, const Value& value) {
         // TODO check if tree already has key. If so, set node to that value
+
+        if(auto existing_node = has_child_with_key(root, key)) {
+            existing_node->val = value;
+            return;
+        }
 
         auto node = get_node_to_insert_at();
 
