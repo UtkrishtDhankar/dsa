@@ -29,6 +29,8 @@ int main() {
             bt.print_in_order();
         } else if (command == "postorder") {
             bt.print_post_order();
+        } else if (command == "minimum") {
+            std::cout << bt.minimum() << std::endl;
         }
     }
 }
