@@ -200,7 +200,14 @@ public:
 /* Implement get function to retrieve the value corresponding to given key in binary tree.
     */
     Value get(const Key& key) {
-        
+        auto node = has_child_with_key(root, key);
+
+        if (node) {
+            return node->val;
+        } else {
+            throw std::out_of_range("Can't get the key, it doesn't exist in the tree");
+        }
+              
     }
 
 /* Implement remove function that can delete a node in binary tree with given key.

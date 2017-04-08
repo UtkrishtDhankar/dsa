@@ -22,6 +22,11 @@ int main() {
             std::cin >> key;
 
             std::cout << bt.has(key) << std::endl;
+        } else if (command == "get") {
+            int key;
+            std::cin >> key;
+
+            std::cout << bt.get(key) << std::endl;
         } else if (command == "preorder") {
             bt.print_pre_order();
         } else if (command == "inorder") {
