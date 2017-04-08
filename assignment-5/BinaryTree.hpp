@@ -93,7 +93,7 @@ class BinaryTree
         }
 
         for (int counter = current_level; counter > 0; counter--) {
-            if (get_ith_bit(nodes_in_next_level, counter + 1)) {
+            if (get_ith_bit(nodes_in_next_level, counter)) {
                 node_to_insert_at = node_to_insert_at->right;
             } else {
                 node_to_insert_at = node_to_insert_at->left;
