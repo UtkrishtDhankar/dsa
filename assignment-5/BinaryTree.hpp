@@ -77,6 +77,25 @@ class BinaryTree
         return min;
     }
   
+    Key find_descendant_with_max_key(BinaryNode<Key, Value>* node) {
+        Key max = node->key;
+        if (node->left) {
+            Key left_max = find_descendant_with_max_key(node->left);
+            if (left_max > max) {
+                max = left_max;
+            }
+        }
+
+        if (node->right) {
+            Key right_max = find_descendant_with_max_key(node->right);
+            if (right_max > max) {
+                max = right_max;
+            }
+        }
+
+        return max;
+    }
+
     inline bool get_ith_bit(int num, int i) {
         return (num >> i & 1);
     }
@@ -222,8 +241,11 @@ public:
      * This method returns the maximum element in the binary tree.
      */
     virtual Key maximum() {
-        // TODO implement
-        return Key();
+        if (!root) {
+            throw std::range_error("Can't find maximum of an empty tree.");
+        }
+
+        return find_descendant_with_max_key(root); 
     }
 
     /*
