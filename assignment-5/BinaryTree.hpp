@@ -60,98 +60,6 @@ class BinaryTree
          }
      }
 
-    Key find_descendant_with_min_key(BinaryNode<Key, Value>* node) {
-        Key min = node->key;
-        if (node->left) {
-            Key left_min = find_descendant_with_min_key(node->left);
-            if (left_min < min) {
-                min = left_min;
-            }
-        }
-
-        if (node->right) {
-            Key right_min = find_descendant_with_min_key(node->right);
-            if (right_min < min) {
-                min = right_min;
-            }
-        }
-
-        return min;
-    }
-  
-    Key find_descendant_with_max_key(BinaryNode<Key, Value>* node) {
-        Key max = node->key;
-        if (node->left) {
-            Key left_max = find_descendant_with_max_key(node->left);
-            if (left_max > max) {
-                max = left_max;
-            }
-        }
-
-        if (node->right) {
-            Key right_max = find_descendant_with_max_key(node->right);
-            if (right_max > max) {
-                max = right_max;
-            }
-        }
-
-        return max;
-    }
-
-    Key find_descendant_just_larger_than_key(BinaryNode<Key, Value>* node, Key key) {
-        Key successor = node->key;
-
-        bool valid_succ = true;
-        if (successor <= key) {
-            valid_succ = false;
-        }
-
-        if (node->left) {
-            Key left_succ = find_descendant_just_larger_than_key(node->left, key);
-            if (left_succ > key && (left_succ - key < successor - key || !valid_succ)) {
-                successor = left_succ;
-                valid_succ = true;
-            }
-        }
-
-        if (node->right) {
-            Key right_succ = find_descendant_just_larger_than_key(node->right, key);
-            if (right_succ > key && (right_succ - key < successor - key || !valid_succ)) {
-                successor = right_succ;
-                valid_succ = true;
-            }
-        }
-
-        return successor;
-    }
-
-    Key find_descendant_just_smaller_than_key(BinaryNode<Key, Value>* node, Key key) {
-        Key predecessor = node->key;
-
-        bool valid_pred = true;
-        if (predecessor >= key) {
-            valid_pred = false;
-        }
-
-        if (node->left) {
-            Key left_pred = find_descendant_just_smaller_than_key(node->left, key);
-            if (left_pred < key && (key - left_pred < key - predecessor || !valid_pred)) {
-                predecessor = left_pred;
-                valid_pred = true;
-            }
-        }
-
-        if (node->right) {
-            Key right_pred = find_descendant_just_smaller_than_key(node->right, key);
-            if (right_pred < key && (key - right_pred < key - predecessor || !valid_pred)) {
-                predecessor = right_pred;
-                valid_pred = true;
-            }
-        }
-
-        return predecessor;
-    }
-
     inline bool get_ith_bit(int num, int i) {
         return (num >> i & 1);
     }
@@ -213,6 +121,98 @@ class BinaryTree
 
 protected:
     BinaryNode<Key,Value> * root;
+
+    virtual Key find_descendant_with_min_key(BinaryNode<Key, Value>* node) {
+        Key min = node->key;
+        if (node->left) {
+            Key left_min = find_descendant_with_min_key(node->left);
+            if (left_min < min) {
+                min = left_min;
+            }
+        }
+
+        if (node->right) {
+            Key right_min = find_descendant_with_min_key(node->right);
+            if (right_min < min) {
+                min = right_min;
+            }
+        }
+
+        return min;
+    }
+  
+    virtual Key find_descendant_with_max_key(BinaryNode<Key, Value>* node) {
+        Key max = node->key;
+        if (node->left) {
+            Key left_max = find_descendant_with_max_key(node->left);
+            if (left_max > max) {
+                max = left_max;
+            }
+        }
+
+        if (node->right) {
+            Key right_max = find_descendant_with_max_key(node->right);
+            if (right_max > max) {
+                max = right_max;
+            }
+        }
+
+        return max;
+    }
+
+    virtual Key find_descendant_just_larger_than_key(BinaryNode<Key, Value>* node, Key key) {
+        Key successor = node->key;
+
+        bool valid_succ = true;
+        if (successor <= key) {
+            valid_succ = false;
+        }
+
+        if (node->left) {
+            Key left_succ = find_descendant_just_larger_than_key(node->left, key);
+            if (left_succ > key && (left_succ - key < successor - key || !valid_succ)) {
+                successor = left_succ;
+                valid_succ = true;
+            }
+        }
+
+        if (node->right) {
+            Key right_succ = find_descendant_just_larger_than_key(node->right, key);
+            if (right_succ > key && (right_succ - key < successor - key || !valid_succ)) {
+                successor = right_succ;
+                valid_succ = true;
+            }
+        }
+
+        return successor;
+    }
+
+    virtual Key find_descendant_just_smaller_than_key(BinaryNode<Key, Value>* node, Key key) {
+        Key predecessor = node->key;
+
+        bool valid_pred = true;
+        if (predecessor >= key) {
+            valid_pred = false;
+        }
+
+        if (node->left) {
+            Key left_pred = find_descendant_just_smaller_than_key(node->left, key);
+            if (left_pred < key && (key - left_pred < key - predecessor || !valid_pred)) {
+                predecessor = left_pred;
+                valid_pred = true;
+            }
+        }
+
+        if (node->right) {
+            Key right_pred = find_descendant_just_smaller_than_key(node->right, key);
+            if (right_pred < key && (key - right_pred < key - predecessor || !valid_pred)) {
+                predecessor = right_pred;
+                valid_pred = true;
+            }
+        }
+
+        return predecessor;
+    }
 
      virtual void print_node_in_order(BinaryNode<Key, Value>* node) {
          if (node) {
