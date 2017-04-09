@@ -12,7 +12,19 @@ class BSTree : public BinaryTree<Key, Value> {
  * Also make sure that all inherited functions work correctly in the context of a binary search tree.
  */
  
- protected:
+private:
+    int max(const int& a, const int&b) {
+        return a > b ? a : b;
+    }
+protected:
+    
+    virtual int height_under_node(BinaryNode<Key, Value>* node) {
+        if (node)
+            return 1 + max(height_under_node(node->right), height_under_node(node->left));
+        else
+            return 0;
+    }
+
     virtual void put_under_node(BinaryNode<Key, Value>* node, const Key& key, const Value& value) {
         if (key == node->key) {
             node->val = value;
@@ -46,7 +58,7 @@ class BSTree : public BinaryTree<Key, Value> {
     */
     virtual int getHeight() {
         // TODO implement
-        return 0;
+        return height_under_node(this->root);
     }
     /*
     * This method returns the total number of elements in the binary search tree.
