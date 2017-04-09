@@ -381,9 +381,9 @@ public:
      * binary tree, after Key.
      */
     virtual Key successor(const Key& key) {
-        Key succ = find_descendant_just_larger_than_key(root, key)->key; 
-        if (succ > key) {
-            return succ;
+        auto succ = find_descendant_just_larger_than_key(root, key); 
+        if (succ && succ->key > key) {
+            return succ->key;
         } else {
             throw std::invalid_argument("No successor for requested key in node");
         }
@@ -394,9 +394,9 @@ public:
      * binary tree, after Key.
      */
     virtual Key predecessor(const Key& key) {
-        Key pred = find_descendant_just_smaller_than_key(root, key)->key; 
-        if (pred < key) {
-            return pred;
+        auto pred = find_descendant_just_smaller_than_key(root, key); 
+        if (pred && pred->key < key) {
+            return pred->key;
         } else {
             throw std::invalid_argument("No predecessor for requested key in node");
         }

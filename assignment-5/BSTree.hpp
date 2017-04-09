@@ -90,7 +90,57 @@ protected:
         return max;
     }
 
+    virtual BinaryNode<Key, Value>* find_descendant_just_larger_than_key(BinaryNode<Key, Value>* node, Key key) override {
+        BinaryNode<Key, Value>* successor = nullptr;
 
+        BinaryNode<Key, Value>* current = has_child_with_key(this->root, key);
+        if (!current) {
+            throw std::invalid_argument("Can't find successor to key that doesn't exist.");
+        }
+
+        if (current->right) {
+            auto temp = current->right;
+            while (temp->left)
+                temp = temp->left;
+
+            successor = temp;
+        } else {
+            auto temp = current;
+            while (temp->parent && temp->parent->left != temp) {
+                temp = temp->parent;
+            }
+
+            successor = temp->parent;
+        }
+
+        return successor;
+    }
+
+    virtual BinaryNode<Key, Value>* find_descendant_just_smaller_than_key(BinaryNode<Key, Value>* node, Key key) override {
+        BinaryNode<Key, Value>* predecessor = nullptr;
+
+        BinaryNode<Key, Value>* current = has_child_with_key(this->root, key);
+        if (!current) {
+            throw std::invalid_argument("Can't find successor to key that doesn't exist.");
+        }
+
+        if (current->left) {
+            auto temp = current->left;
+            while (temp->right)
+                temp = temp->right;
+
+            predecessor = temp;
+        } else {
+            auto temp = current;
+            while (temp->parent && temp->parent->right != temp) {
+                temp = temp->parent;
+            }
+
+            predecessor = temp->parent;
+        }
+
+        return predecessor;
+    }
 
  public:
     virtual void put(const Key& key, const Value& value) override {
