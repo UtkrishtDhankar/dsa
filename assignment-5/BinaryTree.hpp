@@ -139,25 +139,25 @@ protected:
         return max;
     }
 
-    virtual Key find_descendant_just_larger_than_key(BinaryNode<Key, Value>* node, Key key) {
-        Key successor = node->key;
+    virtual BinaryNode<Key, Value>* find_descendant_just_larger_than_key(BinaryNode<Key, Value>* node, Key key) {
+        auto successor = node;
 
         bool valid_succ = true;
-        if (successor <= key) {
+        if (successor->key <= key) {
             valid_succ = false;
         }
 
         if (node->left) {
-            Key left_succ = find_descendant_just_larger_than_key(node->left, key);
-            if (left_succ > key && (left_succ - key < successor - key || !valid_succ)) {
+            auto left_succ = find_descendant_just_larger_than_key(node->left, key);
+            if (left_succ->key > key && (left_succ->key - key < successor->key - key || !valid_succ)) {
                 successor = left_succ;
                 valid_succ = true;
             }
         }
 
         if (node->right) {
-            Key right_succ = find_descendant_just_larger_than_key(node->right, key);
-            if (right_succ > key && (right_succ - key < successor - key || !valid_succ)) {
+            auto right_succ = find_descendant_just_larger_than_key(node->right, key);
+            if (right_succ->key > key && (right_succ->key - key < successor->key - key || !valid_succ)) {
                 successor = right_succ;
                 valid_succ = true;
             }
@@ -381,7 +381,7 @@ public:
      * binary tree, after Key.
      */
     virtual Key successor(const Key& key) {
-        Key succ = find_descendant_just_larger_than_key(root, key); 
+        Key succ = find_descendant_just_larger_than_key(root, key)->key; 
         if (succ > key) {
             return succ;
         } else {

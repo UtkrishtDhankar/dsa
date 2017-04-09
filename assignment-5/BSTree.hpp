@@ -90,60 +90,8 @@ protected:
         return max;
     }
 
-    virtual Key find_descendant_just_larger_than_key(BinaryNode<Key, Value>* node, Key key) override {
-        Key successor = node->key;
 
-        bool valid_succ = true;
-        if (successor <= key) {
-            valid_succ = false;
-        }
 
-        if (node->left) {
-            Key left_succ = find_descendant_just_larger_than_key(node->left, key);
-            if (left_succ > key && (left_succ - key < successor - key || !valid_succ)) {
-                successor = left_succ;
-                valid_succ = true;
-            }
-        }
-
-        if (node->right) {
-            Key right_succ = find_descendant_just_larger_than_key(node->right, key);
-            if (right_succ > key && (right_succ - key < successor - key || !valid_succ)) {
-                successor = right_succ;
-                valid_succ = true;
-            }
-        }
-
-        return successor;
-    }
-
-    virtual Key find_descendant_just_smaller_than_key(BinaryNode<Key, Value>* node, Key key) override {
-        Key predecessor = node->key;
-
-        bool valid_pred = true;
-        if (predecessor >= key) {
-            valid_pred = false;
-        }
-
-        if (node->left) {
-            Key left_pred = find_descendant_just_smaller_than_key(node->left, key);
-            if (left_pred < key && (key - left_pred < key - predecessor || !valid_pred)) {
-                predecessor = left_pred;
-                valid_pred = true;
-            }
-        }
-
-        if (node->right) {
-            Key right_pred = find_descendant_just_smaller_than_key(node->right, key);
-            if (right_pred < key && (key - right_pred < key - predecessor || !valid_pred)) {
-                predecessor = right_pred;
-                valid_pred = true;
-            }
-        }
-
-        return predecessor;
-    }
-  
  public:
     virtual void put(const Key& key, const Value& value) override {
         if (!this->root) {
