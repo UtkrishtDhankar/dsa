@@ -27,6 +27,11 @@ int main() {
             std::cin >> key;
 
             std::cout << bt.get(key) << std::endl;
+        } else if (command == "remove") {
+            int key;
+            std::cin >> key;
+
+            bt.remove(key);
         } else if (command == "preorder") {
             bt.print_pre_order();
         } else if (command == "inorder") {

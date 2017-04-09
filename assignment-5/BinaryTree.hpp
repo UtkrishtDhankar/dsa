@@ -164,6 +164,33 @@ class BinaryTree
         return node_to_insert_at;
      }
 
+    void decrement_num_nodes() {
+        if (nodes_in_next_level == 0) {
+        current_level--;
+        nodes_in_next_level = (1 << (current_level + 1)) - 1;
+        } else {
+            nodes_in_next_level--;
+        }
+    }
+
+     BinaryNode<Key, Value>* get_node_to_delete_at() {
+        if (current_level == -1) {
+            return nullptr; // can't delete an element when tree is empty
+        } else if (current_level == 0) {
+            return root; // Have to delete the root
+        }
+
+         decrement_num_nodes();
+
+         auto node_to_deletes_parent = get_node_to_insert_at();
+
+         if (node_to_deletes_parent->right) {
+            return node_to_deletes_parent->right;
+         } else {
+             return node_to_deletes_parent->left;
+         }
+     }
+
      void print_node_in_order(BinaryNode<Key, Value>* node) {
          if (node) {
              print_node_in_order(node->left);
@@ -213,7 +240,43 @@ public:
 /* Implement remove function that can delete a node in binary tree with given key.
     */
     virtual void remove(const Key& key) {
-        
+        // TODO this should probably fix the mess it makes. It doesn't work really
+        // This probably messes up the current_level and the nodes_in_next_level
+        // This also somehow manages to delete two things at the same time sometimes?
+        // Need to debug
+        auto node = has_child_with_key(root, key);
+
+        if (!node) {
+            throw std::invalid_argument("Can't remove key, it doesn't exist in the tree.");
+        }
+
+        auto node_to_swap_with = get_node_to_delete_at();
+        if (!node_to_swap_with) {
+            throw std::invalid_argument("Can't remove key, couldn't find node to swap it with'");
+        } else if (node_to_swap_with == root && current_level == 0 && nodes_in_next_level == 0) {
+            // In this case we have to delete the last element in the tree, so we just remove root
+            root = nullptr;
+            decrement_num_nodes();
+            return;
+        }
+
+        Key node_key = node->key;
+        Value node_value = node->val;
+
+        node->key = node_to_swap_with->key;
+        node->val = node_to_swap_with->val;
+
+        node_to_swap_with->key = node_key;
+        node_to_swap_with->val = node_value;
+
+        if (node_to_swap_with->parent->left == node_to_swap_with) {
+            node_to_swap_with->parent->left = nullptr;   
+        } else {
+            node_to_swap_with->parent->right = nullptr;   
+        }
+
+        decrement_num_nodes();
+
     }
 
 /* Implement has function which will return true if the given key is present in binary tree
