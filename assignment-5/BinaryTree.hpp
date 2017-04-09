@@ -39,25 +39,6 @@ class BinaryTree
 	/* You can implement your own helper functions whenever required.
 	 */
 
-     virtual BinaryNode<Key, Value>* has_child_with_key(BinaryNode<Key, Value>* node, Key k) {
-         if (node == nullptr) {
-             return nullptr;
-         } else if (node->key == k) {
-             return node;
-         } else {
-             BinaryNode<Key, Value>* left = has_child_with_key(node->left, k);
-             BinaryNode<Key, Value>* right = has_child_with_key(node->right, k);
-
-             if (left) {
-                 return left;
-             } else if (right) {
-                 return right;
-             } else {
-                 return nullptr;
-             }
-         }
-     }
-
     inline bool get_ith_bit(int num, int i) {
         return (num >> i & 1);
     }
@@ -211,6 +192,26 @@ protected:
 
         return predecessor;
     }
+
+    virtual BinaryNode<Key, Value>* has_child_with_key(BinaryNode<Key, Value>* node, Key k) {
+        if (node == nullptr) {
+            return nullptr;
+        } else if (node->key == k) {
+            return node;
+        } else {
+            BinaryNode<Key, Value>* left = has_child_with_key(node->left, k);
+            BinaryNode<Key, Value>* right = has_child_with_key(node->right, k);
+
+            if (left) {
+                return left;
+            } else if (right) {
+                return right;
+            } else {
+                return nullptr;
+            }
+        }
+    }
+
 
      virtual void print_node_in_order(BinaryNode<Key, Value>* node) {
          if (node) {
