@@ -28,7 +28,7 @@ public:
      */
      BinaryNode(Key in_key, Value in_value,
                 BinaryNode<Key, Value>* r, BinaryNode<Key, Value>* p)
-          : key(in_key), val(in_value), parent(p), root(r) {
+          : key(in_key), val(in_value), root(r), parent(p) {
         left = right = nullptr;
     }
 };
