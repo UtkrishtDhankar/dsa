@@ -60,13 +60,6 @@ class BinaryTree
          }
      }
 
-    // Only to be called if the tree is already guaranteed to have this key
-    Value get_descendant_with_value_key(BinaryNode<Key, Value>* node, Key k) {
-        if (node->key == k) {
-            return node->val;
-        }
-    }
-
     Key find_descendant_with_min_key(BinaryNode<Key, Value>* node) {
         Key min = node->key;
         if (node->left) {
@@ -218,7 +211,10 @@ class BinaryTree
          }
      }
 
-     void print_node_in_order(BinaryNode<Key, Value>* node) {
+protected:
+    BinaryNode<Key,Value> * root;
+
+     virtual void print_node_in_order(BinaryNode<Key, Value>* node) {
          if (node) {
              print_node_in_order(node->left);
              std::cout << node->key << ": " << node->val << std::endl;
@@ -226,7 +222,7 @@ class BinaryTree
          }
      }
 
-     void print_node_post_order(BinaryNode<Key, Value>* node) {
+     virtual void print_node_post_order(BinaryNode<Key, Value>* node) {
          if (node) {
              print_node_post_order(node->left);
              print_node_post_order(node->right);
@@ -234,16 +230,13 @@ class BinaryTree
          }
      }
 
-     void print_node_pre_order(BinaryNode<Key, Value>* node) {
+     virtual void print_node_pre_order(BinaryNode<Key, Value>* node) {
          if (node) {
              std::cout << node->key << ": " << node->val << std::endl;
              print_node_pre_order(node->left);
              print_node_pre_order(node->right);
          }
      }
-
-protected:
-    BinaryNode<Key,Value> * root;
 
 public:
 
