@@ -152,6 +152,59 @@ protected:
         }
     }
 
+    virtual void remove(const Key& key) override {
+        auto node_to_remove = has_child_with_key(this->root, key);
+
+        if (!node_to_remove) {
+            throw std::runtime_error("Can't remove a nonexisting key");
+        }
+
+        if (!node_to_remove->left && !node_to_remove->right) {
+            // node is leaf
+            if (node_to_remove->parent) {
+                if (node_to_remove->parent->left == node_to_remove) {
+                    node_to_remove->parent->left = nullptr;
+                } else if (node_to_remove->parent->right == node_to_remove) {
+                    node_to_remove->parent->right = nullptr;
+                }
+            } else {
+                // node_to_remove must be the root
+                this->root = nullptr;
+            }
+
+            delete node_to_remove;
+        } else if (node_to_remove->left && node_to_remove->right) {
+            // node has two children
+            auto successor = find_descendant_just_larger_than_key(this->root, node_to_remove->key);
+            node_to_remove->key = successor->key;
+            node_to_remove->val = successor->val;
+
+            if (successor->parent->left == successor) {
+                successor->parent->left = nullptr;
+            } else {
+                successor->parent->right = nullptr;
+            }
+
+            delete successor;
+        } else {
+            // node has one child
+            BinaryNode<Key, Value>* child;
+            if (node_to_remove->left) {
+                child = node_to_remove->left;
+            } else {
+                child = node_to_remove->right;
+            }
+
+            if (node_to_remove->parent->left == node_to_remove) {
+                node_to_remove->parent->left = child;
+            } else {
+                node_to_remove->parent->right = child;
+            }
+
+            delete node_to_remove;
+        }
+    }
+
     /*
     * This method returns the current height of the binary search tree.
     */

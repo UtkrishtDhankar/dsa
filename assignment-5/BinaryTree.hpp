@@ -259,10 +259,6 @@ public:
 /* Implement remove function that can delete a node in binary tree with given key.
     */
     virtual void remove(const Key& key) {
-        // TODO this should probably fix the mess it makes. It doesn't work really
-        // This probably messes up the current_level and the nodes_in_next_level
-        // This also somehow manages to delete two things at the same time sometimes?
-        // Need to debug
         auto node = has_child_with_key(root, key);
 
         if (!node) {
@@ -295,7 +291,6 @@ public:
         }
 
         decrement_num_nodes();
-
     }
 
 /* Implement has function which will return true if the given key is present in binary tree
