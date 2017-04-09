@@ -25,6 +25,14 @@ protected:
             return 0;
     }
 
+    virtual int size_under_node(BinaryNode<Key, Value>* node) {
+        if (node) {
+            return 1 + size_under_node(node->left) + size_under_node(node->right);
+        } else {
+            return 0;
+        }
+    }
+
     virtual void put_under_node(BinaryNode<Key, Value>* node, const Key& key, const Value& value) {
         if (key == node->key) {
             node->val = value;
@@ -65,7 +73,7 @@ protected:
     */
     virtual int size() {
         // TODO implement
-        return 0;
+        return size_under_node(this->root);
     }
     /*
     * This method prints the key value pairs of the binary search tree, sorted by
