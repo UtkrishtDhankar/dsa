@@ -11,7 +11,36 @@ class BSTree : public BinaryTree<Key, Value> {
  * Only override those where you can decrease the time complexity and where you absolutely need to do it.
  * Also make sure that all inherited functions work correctly in the context of a binary search tree.
  */
+ 
+ protected:
+    virtual void put_under_node(BinaryNode<Key, Value>* node, const Key& key, const Value& value) {
+        if (key == node->key) {
+            node->val = value;
+        } else if (key > node->key) {
+            if (node->right) {
+                put_under_node(node->right, key, value);
+            } else {
+                node->right = new BinaryNode<Key, Value> (key, value, this->root, node);
+            }
+        } else if (key < node->key) {
+            if (node->left) {
+                put_under_node(node->left, key, value);
+            } else {
+                node->left = new BinaryNode<Key, Value> (key, value, this->root, node);
+            }
+        }
+    }
+
  public:
+    virtual void put(const Key& key, const Value& value) override {
+        if (!this->root) {
+            this->root = new BinaryNode<Key, Value> (key, value, nullptr, nullptr);
+            this->root= this->root;
+        } else {
+            put_under_node(this->root, key, value);
+        }
+    }
+
     /*
     * This method returns the current height of the binary search tree.
     */
@@ -31,7 +60,7 @@ class BSTree : public BinaryTree<Key, Value> {
     * their keys.
     */
     virtual void print() {
-        // TODO implement
+        this->print_in_order();
     }
 };
 

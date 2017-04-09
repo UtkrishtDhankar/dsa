@@ -27,10 +27,8 @@ public:
     /* This contructor should assign the key and val from the passed parameters
      */
      BinaryNode(Key in_key, Value in_value,
-                BinaryNode<Key, Value>* root, BinaryNode<Key, Value>* p)
-          : key(in_key), val(in_value), parent(p) {
-        root = this;
-
+                BinaryNode<Key, Value>* r, BinaryNode<Key, Value>* p)
+          : key(in_key), val(in_value), parent(p), root(r) {
         left = right = nullptr;
     }
 };
@@ -120,7 +118,7 @@ class BinaryTree
      }
 
 protected:
-    BinaryNode<Key,Value> * root;
+    BinaryNode<Key, Value> * root;
 
     virtual Key find_descendant_with_min_key(BinaryNode<Key, Value>* node) {
         Key min = node->key;
