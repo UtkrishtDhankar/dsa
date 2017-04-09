@@ -166,25 +166,25 @@ protected:
         return successor;
     }
 
-    virtual Key find_descendant_just_smaller_than_key(BinaryNode<Key, Value>* node, Key key) {
-        Key predecessor = node->key;
+    virtual BinaryNode<Key, Value>* find_descendant_just_smaller_than_key(BinaryNode<Key, Value>* node, Key key) {
+        auto predecessor = node;
 
         bool valid_pred = true;
-        if (predecessor >= key) {
+        if (predecessor->key >= key) {
             valid_pred = false;
         }
 
         if (node->left) {
-            Key left_pred = find_descendant_just_smaller_than_key(node->left, key);
-            if (left_pred < key && (key - left_pred < key - predecessor || !valid_pred)) {
+            auto left_pred = find_descendant_just_smaller_than_key(node->left, key);
+            if (left_pred->key < key && (key - left_pred->key < key - predecessor->key || !valid_pred)) {
                 predecessor = left_pred;
                 valid_pred = true;
             }
         }
 
         if (node->right) {
-            Key right_pred = find_descendant_just_smaller_than_key(node->right, key);
-            if (right_pred < key && (key - right_pred < key - predecessor || !valid_pred)) {
+            auto right_pred = find_descendant_just_smaller_than_key(node->right, key);
+            if (right_pred->key < key && (key - right_pred->key < key - predecessor->key || !valid_pred)) {
                 predecessor = right_pred;
                 valid_pred = true;
             }
@@ -394,7 +394,7 @@ public:
      * binary tree, after Key.
      */
     virtual Key predecessor(const Key& key) {
-        Key pred = find_descendant_just_smaller_than_key(root, key); 
+        Key pred = find_descendant_just_smaller_than_key(root, key)->key; 
         if (pred < key) {
             return pred;
         } else {
