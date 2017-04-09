@@ -146,7 +146,7 @@ protected:
     virtual void put(const Key& key, const Value& value) override {
         if (!this->root) {
             this->root = new BinaryNode<Key, Value> (key, value, nullptr, nullptr);
-            this->root= this->root;
+            this->root->root = this->root;
         } else {
             put_under_node(this->root, key, value);
         }
@@ -195,10 +195,15 @@ protected:
                 child = node_to_remove->right;
             }
 
-            if (node_to_remove->parent->left == node_to_remove) {
-                node_to_remove->parent->left = child;
+            if (node_to_remove->parent) {
+                if (node_to_remove->parent->left == node_to_remove) {
+                    node_to_remove->parent->left = child;
+                } else {
+                    node_to_remove->parent->right = child;
+                }
             } else {
-                node_to_remove->parent->right = child;
+                this->root = child;
+                child->root = child;
             }
 
             delete node_to_remove;
