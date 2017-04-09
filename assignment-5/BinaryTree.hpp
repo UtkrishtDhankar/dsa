@@ -132,6 +132,33 @@ class BinaryTree
         return successor;
     }
 
+    Key find_descendant_just_smaller_than_key(BinaryNode<Key, Value>* node, Key key) {
+        Key predecessor = node->key;
+
+        bool valid_pred = true;
+        if (predecessor >= key) {
+            valid_pred = false;
+        }
+
+        if (node->left) {
+            Key left_pred = find_descendant_just_smaller_than_key(node->left, key);
+            if (left_pred < key && (key - left_pred < key - predecessor || !valid_pred)) {
+                predecessor = left_pred;
+                valid_pred = true;
+            }
+        }
+
+        if (node->right) {
+            Key right_pred = find_descendant_just_smaller_than_key(node->right, key);
+            if (right_pred < key && (key - right_pred < key - predecessor || !valid_pred)) {
+                predecessor = right_pred;
+                valid_pred = true;
+            }
+        }
+
+        return predecessor;
+    }
+
     inline bool get_ith_bit(int num, int i) {
         return (num >> i & 1);
     }
@@ -375,8 +402,12 @@ public:
      * binary tree, after Key.
      */
     virtual Key predecessor(const Key& key) {
-        // TODO implement
-        return Key();
+        Key pred = find_descendant_just_smaller_than_key(root, key); 
+        if (pred < key) {
+            return pred;
+        } else {
+            throw std::invalid_argument("No predecessor for requested key in node");
+        }
     }
 };
 

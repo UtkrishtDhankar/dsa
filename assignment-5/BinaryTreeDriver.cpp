@@ -47,6 +47,15 @@ int main() {
             std::cin >> key;
 
             std::cout << bt.successor(key) << std::endl;
+        } else if (command == "predecessor") {
+            int key;
+            std::cin >> key;
+
+            std::cout << bt.predecessor(key) << std::endl;
+        } else {
+            break;
         }
     }
+
+    return 0;
 }
