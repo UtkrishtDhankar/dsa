@@ -39,7 +39,7 @@ class BinaryTree
 	/* You can implement your own helper functions whenever required.
 	 */
 
-     BinaryNode<Key, Value>* has_child_with_key(BinaryNode<Key, Value>* node, Key k) {
+     virtual BinaryNode<Key, Value>* has_child_with_key(BinaryNode<Key, Value>* node, Key k) {
          if (node == nullptr) {
              return nullptr;
          } else if (node->key == k) {

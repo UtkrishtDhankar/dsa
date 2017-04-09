@@ -33,6 +33,26 @@ protected:
         }
     }
 
+    virtual BinaryNode<Key, Value>* has_child_with_key(BinaryNode<Key, Value>* node, Key k) override {
+        if (node->key == k) {
+            return node;
+        } else if (k < node->key) {
+            if (node->left) {
+                return has_child_with_key(node->left, k);
+            } else {
+                return nullptr;
+            }
+        } else if (k > node->key) {
+            if (node->right) {
+                return has_child_with_key(node->right, k);
+            } else {
+                return nullptr;
+            }
+        } else {
+            return nullptr; // This really shouldn't happen btw
+        }
+    }
+
     virtual void put_under_node(BinaryNode<Key, Value>* node, const Key& key, const Value& value) {
         if (key == node->key) {
             node->val = value;
