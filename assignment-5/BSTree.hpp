@@ -53,21 +53,27 @@ protected:
         }
     }
 
-    virtual void put_under_node(BinaryNode<Key, Value>* node, const Key& key, const Value& value) {
+    // Returns the newly inserted node
+    virtual BinaryNode<Key, Value>* put_under_node(BinaryNode<Key, Value>* node, const Key& key, const Value& value) {
         if (key == node->key) {
             node->val = value;
+            return node;
         } else if (key > node->key) {
             if (node->right) {
-                put_under_node(node->right, key, value);
+                return put_under_node(node->right, key, value);
             } else {
                 node->right = new BinaryNode<Key, Value> (key, value, this->root, node);
+                return node->right;
             }
         } else if (key < node->key) {
             if (node->left) {
-                put_under_node(node->left, key, value);
+                return put_under_node(node->left, key, value);
             } else {
                 node->left = new BinaryNode<Key, Value> (key, value, this->root, node);
+                return node->left;
             }
+        } else {
+            return nullptr; // something has gone wrong if this happens
         }
     }
 
