@@ -243,45 +243,57 @@ protected:
 
 
     virtual void right_rotation_at(BinaryNode<Key, Value>* node) {
-        if (!node->left || !node->left->left || !node->left->right || !node->right) {
+        if (!node || !node->left) {
             throw std::invalid_argument("Can't right rotate at given node");
         } else {
             BinaryNode<Key, Value>* left = node->left;
             BinaryNode<Key, Value>* parent = node->parent;
 
             node->left = left->right;
-            node->left->parent = node;
+            if (node->left)
+                node->left->parent = node;
 
             left->right = node;
-            left->right->parent = left;
+            if (left->right)
+                left->right->parent = left;
 
             left->parent = parent;            
-            if (parent->left == node) {
-                parent->left == left;
-            } else if (parent->right == node) {
-                parent->right == left;
+            if (parent) {
+                if (parent->left == node) {
+                    parent->left = left;
+                } else if (parent->right == node) {
+                    parent->right = left;
+                }
+            } else {
+                root = left;
             }
         }
     }
 
     virtual void left_rotation_at(BinaryNode<Key, Value>* node) {
-        if (!node->right || !node->right->left || !node->right->right || !node->left) {
-            throw std::invalid_argument("Can't right rotate at given node");
+        if (!node || !node->right) {
+            throw std::invalid_argument("Can't left rotate at given node");
         } else {
             BinaryNode<Key, Value>* right = node->right;
             BinaryNode<Key, Value>* parent = node->parent;
 
             node->right = right->left;
-            node->right->parent = node;
+            if (node->right)
+                node->right->parent = node;
 
             right->left = node;
-            right->left->parent = right;
+            if (right->left)
+                right->left->parent = right;
 
             right->parent = parent;
-            if (parent->left == node) {
-                parent->left == right;
-            } else if (parent->right == node) {
-                parent->right == right;
+            if (parent) {
+                if (parent->left == node) {
+                    parent->left = right;
+                } else if (parent->right == node) {
+                    parent->right = right;
+                }
+            } else {
+                root = right;
             }
         }
     }
