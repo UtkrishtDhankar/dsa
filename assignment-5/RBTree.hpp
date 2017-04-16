@@ -25,7 +25,7 @@ public:
 		c = BLACK;
 	}
 
-	RBNode(Key in_key, Value in_value, c_in, BinaryNode<Key, Value>* r, BinaryNode<Key, Value>* p)
+	RBNode(Key in_key, Value in_value, Color c_in, BinaryNode<Key, Value>* r, BinaryNode<Key, Value>* p)
 		: BinaryNode<Key, Value> (in_key, in_value, r, p) {
 		c = c_in;	
 	}
