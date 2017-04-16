@@ -7,14 +7,16 @@ namespace cs202 {
 template<class Key, class Value>
 class AVLNode : public BinaryNode<Key, Value> {
 public:
-    int height = 0;
+    int height;
 
     AVLNode() {
+        height = 1;
     }
 
     AVLNode(Key in_key, Value in_value,
             BinaryNode<Key, Value>* r, BinaryNode<Key, Value>* p)
           : BinaryNode<Key, Value> (in_key, in_value, r, p) {
+        height = 1;
     }
 
     AVLNode<Key, Value>* get_parent() {return dynamic_cast<AVLNode<Key, Value>*> (this->parent);}
@@ -71,11 +73,10 @@ private:
     void increase_height_up_tree(AVLNode<Key, Value>* node) {
         while (node->parent) {
             AVLNode<Key, Value>* parent = dynamic_cast<AVLNode<Key, Value>* > (node->parent);
-            AVLNode<Key, Value>* parent_left = dynamic_cast<AVLNode<Key, Value>*> (parent->left);
-            AVLNode<Key, Value>* parent_right = dynamic_cast<AVLNode<Key, Value>*> (parent->right);
-            node = parent;
 
             parent->height = get_height_of(parent);
+
+            node = parent;
         }
     }
 
@@ -150,7 +151,7 @@ protected:
                 }
             } else if (bf == -2) {
                 AVLNode<Key, Value>* right = cur->get_right();
-                if (compute_balance_factor(right) == 1) {
+                if (compute_balance_factor(right) == -1) {
                     this->left_rotation_at(cur);
 
                     // cur->height -= 2;
@@ -158,7 +159,7 @@ protected:
                     fix_height_of_node(cur);
                     fix_height_of_node(right);
                 } else {
-                    if (compute_balance_factor(right) == -1) {
+                    if (compute_balance_factor(right) == 1) {
                         this->right_rotation_at(right);
                     }
                     this->left_rotation_at(cur);
@@ -255,8 +256,12 @@ public:
     }
 
     virtual int getHeight() override {
-        return dynamic_cast<AVLNode<Key, Value>* > (this->root)->height;
+        AVLNode<Key, Value>* avl_root = dynamic_cast<AVLNode<Key, Value>* > (this->root);
+        fix_height_of_node(avl_root);
+
+        return avl_root->height;
     }
+    
 
 };
 
