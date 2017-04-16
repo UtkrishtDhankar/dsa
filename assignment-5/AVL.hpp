@@ -187,6 +187,7 @@ public:
             AVLNode<Key, Value>* inserted_node = put_under_node(this->root, key, value);
             increase_height_up_tree(inserted_node);
             fixup_at(inserted_node);
+            increase_height_up_tree(inserted_node);
         }
     }
 
@@ -257,7 +258,7 @@ public:
 
     virtual int getHeight() override {
         AVLNode<Key, Value>* avl_root = dynamic_cast<AVLNode<Key, Value>* > (this->root);
-        fix_height_of_node(avl_root);
+        avl_root->height = this->height_under_node(avl_root);
 
         return avl_root->height;
     }
