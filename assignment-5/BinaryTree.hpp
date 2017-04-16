@@ -241,6 +241,51 @@ protected:
          }
      }
 
+
+    virtual void right_rotation_at(BinaryNode<Key, Value>* node) {
+        if (!node->left || !node->left->left || !node->left->right || !node->right) {
+            throw std::invalid_argument("Can't right rotate at given node");
+        } else {
+            BinaryNode<Key, Value>* left = node->left;
+            BinaryNode<Key, Value>* parent = node->parent;
+
+            node->left = left->right;
+            node->left->parent = node;
+
+            left->right = node;
+            left->right->parent = left;
+
+            left->parent = parent;            
+            if (parent->left == node) {
+                parent->left == left;
+            } else if (parent->right == node) {
+                parent->right == left;
+            }
+        }
+    }
+
+    virtual void left_rotation_at(BinaryNode<Key, Value>* node) {
+        if (!node->right || !node->right->left || !node->right->right || !node->left) {
+            throw std::invalid_argument("Can't right rotate at given node");
+        } else {
+            BinaryNode<Key, Value>* right = node->right;
+            BinaryNode<Key, Value>* parent = node->parent;
+
+            node->right = right->left;
+            node->right->parent = node;
+
+            right->left = node;
+            right->left->parent = right;
+
+            right->parent = parent;
+            if (parent->left == node) {
+                parent->left == right;
+            } else if (parent->right == node) {
+                parent->right == right;
+            }
+        }
+    }
+
 public:
 
     BinaryTree() {
