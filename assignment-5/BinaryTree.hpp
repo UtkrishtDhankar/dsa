@@ -31,6 +31,10 @@ public:
           : key(in_key), val(in_value), root(r), parent(p) {
         left = right = nullptr;
     }
+
+    virtual ~BinaryNode() {
+
+    }
 };
 
 template<class Key, class Value>

@@ -7,21 +7,14 @@ namespace cs202 {
 template<class Key, class Value>
 class AVLNode : public BinaryNode<Key, Value> {
 public:
-    Key key;
-    Value val;
-    AVLNode<Key,Value> * root, * left, * right, * parent;
-
-    int height;
+    int height = 0;
 
     AVLNode() {
-        height = 0;
     }
 
     AVLNode(Key in_key, Value in_value,
-                AVLNode<Key, Value>* r, AVLNode<Key, Value>* p)
-          : key(in_key), val(in_value), root(r), parent(p) {
-        left = right = nullptr;
-        height = 0;
+            BinaryNode<Key, Value>* r, BinaryNode<Key, Value>* p)
+          : BinaryNode<Key, Value> (in_key, in_value, r, p) {
     }
 };
 
@@ -45,18 +38,22 @@ class AVL : public BSTree<Key, Value> {
  * make sure these functions are there.
  */
 private:
+    int max(int a, int b) {
+        return a > b ? a : b;
+    }
+
     void increase_height_up_tree(AVLNode<Key, Value>* node) {
         while (node->parent) {
-            AVLNode<Key, Value>* parent = node->parent;
-            if (parent->left && parent->right) {
+            AVLNode<Key, Value>* parent = dynamic_cast<AVLNode<Key, Value>* > (node->parent);
+            AVLNode<Key, Value>* parent_left = dynamic_cast<AVLNode<Key, Value>*> (parent->left);
+            AVLNode<Key, Value>* parent_right = dynamic_cast<AVLNode<Key, Value>*> (parent->right);
+            if (parent_left && parent_right) {
                 // Set the parent's height
-                parent->height = 1 
-                    + parent->left->height > parent->right->height 
-                    ? parent->left->height : parent->right->height;
-            } else if (parent->left) {
-                parent->height = 1 + parent->left->height;
-            } else if (parent->right) {
-                parent->height = 1 + parent->right->height;
+                parent->height = 1 + max(parent_left->height, parent_right->height);
+            } else if (parent_left) {
+                parent->height = 1 + parent_left->height;
+            } else if (parent_right) {
+                parent->height = 1 + parent_right->height;
             } else {
                 // we really shouldn't be here
                 // TODO throw exception here
@@ -67,25 +64,25 @@ private:
     }
 
 protected:
-    AVLNode<Key, Value>* root;
+    // AVLNode<Key, Value>* root;
 
-    virtual AVLNode<Key, Value>* put_under_node(AVLNode<Key, Value>* node, const Key& key, const Value& value) {
+    virtual AVLNode<Key, Value>* put_under_node(BinaryNode<Key, Value>* node, const Key& key, const Value& value) override {
         if (key == node->key) {
             node->val = value;
-            return node;
+            return dynamic_cast<AVLNode<Key, Value>*> (node);
         } else if (key > node->key) {
             if (node->right) {
                 return put_under_node(node->right, key, value);
             } else {
                 node->right = new AVLNode<Key, Value> (key, value, this->root, node);
-                return node->right;
+                return dynamic_cast<AVLNode<Key, Value>*> (node->right);
             }
         } else if (key < node->key) {
             if (node->left) {
                 return put_under_node(node->left, key, value);
             } else {
                 node->left = new AVLNode<Key, Value> (key, value, this->root, node);
-                return node->left;
+                return dynamic_cast<AVLNode<Key,Value>*> (node->left);
             }
         } else {
             return nullptr; // something has gone wrong if this happens
@@ -94,14 +91,20 @@ protected:
 
 public:
     virtual void put(const Key& key, const Value& value) override {
-        if (!root) {
-            root = new AVLNode<Key, Value>(key, value, nullptr, nullptr);
-            root->root = root;
-            root->height = 0;
+        if (!this->root) {
+            this->root = new AVLNode<Key, Value>(key, value, nullptr, nullptr);
+            this->root->root = this->root;
+            dynamic_cast<AVLNode<Key, Value>* > (this->root)->height = 0;
+
+            // BinaryTree<Key, Value>::root = dynamic_cast<BinaryNode<Key, Value>* > (root);
         } else {
-            AVLNode<Key, Value>* inserted_node = put_under_node(root, key, value);
+            AVLNode<Key, Value>* inserted_node = put_under_node(this->root, key, value);
             increase_height_up_tree(inserted_node);
         }
+    }
+
+    virtual int getHeight() override {
+        return dynamic_cast<AVLNode<Key, Value>* > (this->root)->height;
     }
 
 };
