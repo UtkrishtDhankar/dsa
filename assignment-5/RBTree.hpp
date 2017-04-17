@@ -231,32 +231,34 @@ class RBTree : public BSTree<Key, Value> {
                 set_color_of(parent, RED);
 
                 this->left_rotation_at(parent);
+                parent = sibling;
             }
 
             // CASE 2
-            if (get_color_of(cur) == BLACK && is_right_child(cur, parent) && get_color_of(sibling) == RED && get_color_of(parent) == BLACK) {
+            else if (get_color_of(cur) == BLACK && is_right_child(cur, parent) && get_color_of(sibling) == RED && get_color_of(parent) == BLACK) {
                 set_color_of(sibling, BLACK);
                 set_color_of(parent, RED);
 
                 this->right_rotation_at(parent);
+                parent = sibling;
             }
 
             // CASE 3
-            if (get_color_of(cur) == BLACK && is_left_child(cur, parent) 
+            else if (get_color_of(cur) == BLACK && is_left_child(cur, parent) 
                     && get_color_of(sibling) == BLACK && get_color_of(sibling->get_left()) == BLACK && get_color_of(sibling->get_right()) == BLACK) {
                 set_color_of(sibling, RED);
                 cur = parent;
             }
 
             // CASE 4
-            if (get_color_of(cur) == BLACK && is_right_child(cur, parent) 
+            else if (get_color_of(cur) == BLACK && is_right_child(cur, parent) 
                     && get_color_of(sibling) == BLACK && get_color_of(sibling->get_left()) == BLACK && get_color_of(sibling->get_right()) == BLACK) {
                 set_color_of(sibling, RED);
                 cur = parent;
             }
 
             // CASE 5
-            if (get_color_of(cur) == BLACK && is_left_child(cur, parent)
+            else if (get_color_of(cur) == BLACK && is_left_child(cur, parent)
                     && get_color_of(sibling) == BLACK && get_color_of(sibling->get_left()) == RED && get_color_of(sibling->get_left()) == BLACK) {
                 set_color_of(sibling->get_left(), BLACK);
                 set_color_of(sibling, RED);
@@ -265,7 +267,7 @@ class RBTree : public BSTree<Key, Value> {
             }
 
             // CASE 6
-            if (get_color_of(cur) == BLACK && is_left_child(cur, parent) 
+            else if (get_color_of(cur) == BLACK && is_left_child(cur, parent) 
                     && get_color_of(sibling) == BLACK && get_color_of(sibling->get_right()) == RED ) {
                 set_color_of(sibling, get_color_of(parent));
                 set_color_of(parent, BLACK);
@@ -276,7 +278,7 @@ class RBTree : public BSTree<Key, Value> {
             }
 
             // CASE 7, mirror of 5
-            if (get_color_of(cur) == BLACK && is_right_child(cur, parent)
+            else if (get_color_of(cur) == BLACK && is_right_child(cur, parent)
                     && get_color_of(sibling) == BLACK && get_color_of(sibling->get_right()) == RED && get_color_of(sibling->get_left()) == BLACK) {
                 set_color_of(sibling->get_right(), BLACK);
                 set_color_of(sibling, RED);
@@ -285,7 +287,7 @@ class RBTree : public BSTree<Key, Value> {
             }
 
             // CASE 8
-            if (get_color_of(cur) == BLACK && is_right_child(cur, parent) 
+            else if (get_color_of(cur) == BLACK && is_right_child(cur, parent) 
                     && get_color_of(sibling) == BLACK && get_color_of(sibling->get_left()) == RED ) {
                 set_color_of(sibling, get_color_of(parent));
                 set_color_of(parent, BLACK);
@@ -321,13 +323,30 @@ protected:
             return nullptr; // something has gone wrong if this happens
         }
     }
+
+    int get_black_height_under(node_ptr node) {
+        int height = 0;
+        if (get_color_of(node) == BLACK) {
+            height += 1;
+        }
+
+        if (node) {
+            height += get_black_height_under(node->get_left());
+        }
+
+        return height;
+    }
+
 public:
     /* Function : blackHeight
     * 
     * Returns:
     * the black height of the red black tree which begins at node_ptr root
     */
-    int blackHeight(node_ptr root);	
+    int blackHeight() {
+        node_ptr rb_root = dynamic_cast<node_ptr> (this->root);
+        return get_black_height_under(rb_root);
+    }
     /*
     * Apart from these functions, also provide functions for rotations in the tree.
     * The signature of the rotation functions is omitted to provide you flexibility in how you implement the internals of your node.
@@ -346,6 +365,7 @@ public:
     virtual void remove(const Key& key) override {
         auto node_to_remove = this->has_child_with_key(this->root, key);
         auto parent = node_to_remove->parent;
+        bool was_black = true;
 
         if (!node_to_remove) {
             throw std::runtime_error("Can't remove a nonexisting key");
@@ -365,6 +385,10 @@ public:
             }
 
             parent = node_to_remove->parent;
+
+            if (get_color_of(dynamic_cast<node_ptr> (node_to_remove)) == RED) {
+                was_black = false;
+            }
             delete node_to_remove;
         } else if (node_to_remove->left && node_to_remove->right) {
             // node has two children
@@ -379,6 +403,9 @@ public:
             }
 
             parent = successor->parent;
+            if (get_color_of(dynamic_cast<node_ptr> (successor)) == RED) {
+                was_black = false;
+            }
             delete successor;
         } else {
             // node has one child
@@ -398,14 +425,23 @@ public:
             } else {
                 this->root = child;
                 child->root = child;
+
+                set_color_of(dynamic_cast<node_ptr> (child), BLACK);
             }
 
-            parent = node_to_remove->parent;
+            parent = node_to_remove->parent;     
+
+            if (get_color_of(dynamic_cast<node_ptr> (node_to_remove)) == RED) {
+                was_black = false;
+            }
             delete node_to_remove;
         }
 
         auto rb_parent = dynamic_cast<node_ptr> (parent);
-        deleteRBFixup(rb_parent);
+
+        if (was_black && rb_parent) {
+            deleteRBFixup(rb_parent);
+        }
     }
 
 };

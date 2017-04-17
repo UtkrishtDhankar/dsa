@@ -116,8 +116,6 @@ protected:
                 if (compute_balance_factor(left) == 1) {
                     this->right_rotation_at(cur);
 
-                    // cur->height -= 2;
-                    // left->height--;
                     fix_height_of_node(cur);
                     fix_height_of_node(left);
                 } else {

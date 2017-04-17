@@ -47,6 +47,8 @@ int main() {
             std::cout << bt.minimum() << std::endl;
         } else if (command == "height") {
             std::cout << bt.getHeight() << std::endl;
+        } else if (command == "bheight") {
+            std::cout << bt.blackHeight() << std::endl;
         } else if (command == "size") {
             std::cout << bt.size() << std::endl;
         } else if (command == "successor") {
