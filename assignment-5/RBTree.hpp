@@ -74,6 +74,24 @@ class RBTree : public BSTree<Key, Value> {
         }
     }
 
+    bool is_left_child(node_ptr node, node_ptr parent) {
+        return (parent->left == node);
+    }
+    bool is_right_child(node_ptr node, node_ptr parent) {
+        return (parent->right == node);
+    }
+
+    ChildType get_child_type_of(node_ptr node, node_ptr parent) {
+        if (is_left_child(node, parent)) {
+            return LEFT;
+        } else if (is_right_child(node, parent)) {
+            return RIGHT;
+        } else {
+            throw std::invalid_argument("Node and parent are not related.");
+        }
+    }
+
+
     ChildType get_child_type_of(node_ptr node) {
         if (!node) {
             throw std::invalid_argument("Can't find child type of nullptr.");
@@ -87,6 +105,18 @@ class RBTree : public BSTree<Key, Value> {
             }
         } else {
             return ROOT;
+        }
+    }
+
+    node_ptr get_sibling_of(node_ptr node, node_ptr parent) {
+        ChildType ct = get_child_type_of(node, parent);
+        if (ct == LEFT) {
+            return parent->get_right();
+        } else if (ct == RIGHT) {
+            return parent->get_left();
+        } else {
+            // ROOTs don't have siblings
+            return nullptr;
         }
     }
 
@@ -187,7 +217,86 @@ class RBTree : public BSTree<Key, Value> {
     * Used after a deletion in the rb tree.
     * It applies fixing mechanisms to make sure that the tree remains a valid red black tree after a deletion.
     */
-    void deleteRBFixup(node_ptr root);
+    void deleteRBFixup(node_ptr parent) {
+        node_ptr cur = nullptr;
+        while(parent && get_color_of(cur) == BLACK) {
+            if (cur) {
+                parent = cur->get_parent();
+            }
+            node_ptr sibling = get_sibling_of(cur, parent);
+
+            // CASE 1
+            if (get_color_of(cur) == BLACK && is_left_child(cur, parent) && get_color_of(sibling) == RED && get_color_of(parent) == BLACK) {
+                set_color_of(sibling, BLACK);
+                set_color_of(parent, RED);
+
+                this->left_rotation_at(parent);
+            }
+
+            // CASE 2
+            if (get_color_of(cur) == BLACK && is_right_child(cur, parent) && get_color_of(sibling) == RED && get_color_of(parent) == BLACK) {
+                set_color_of(sibling, BLACK);
+                set_color_of(parent, RED);
+
+                this->right_rotation_at(parent);
+            }
+
+            // CASE 3
+            if (get_color_of(cur) == BLACK && is_left_child(cur, parent) 
+                    && get_color_of(sibling) == BLACK && get_color_of(sibling->get_left()) == BLACK && get_color_of(sibling->get_right()) == BLACK) {
+                set_color_of(sibling, RED);
+                cur = parent;
+            }
+
+            // CASE 4
+            if (get_color_of(cur) == BLACK && is_right_child(cur, parent) 
+                    && get_color_of(sibling) == BLACK && get_color_of(sibling->get_left()) == BLACK && get_color_of(sibling->get_right()) == BLACK) {
+                set_color_of(sibling, RED);
+                cur = parent;
+            }
+
+            // CASE 5
+            if (get_color_of(cur) == BLACK && is_left_child(cur, parent)
+                    && get_color_of(sibling) == BLACK && get_color_of(sibling->get_left()) == RED && get_color_of(sibling->get_left()) == BLACK) {
+                set_color_of(sibling->get_left(), BLACK);
+                set_color_of(sibling, RED);
+
+                this->right_rotation_at(sibling);
+            }
+
+            // CASE 6
+            if (get_color_of(cur) == BLACK && is_left_child(cur, parent) 
+                    && get_color_of(sibling) == BLACK && get_color_of(sibling->get_right()) == RED ) {
+                set_color_of(sibling, get_color_of(parent));
+                set_color_of(parent, BLACK);
+                set_color_of(sibling->get_right(), BLACK);
+
+                this->left_rotation_at(parent);
+                break;
+            }
+
+            // CASE 7, mirror of 5
+            if (get_color_of(cur) == BLACK && is_right_child(cur, parent)
+                    && get_color_of(sibling) == BLACK && get_color_of(sibling->get_right()) == RED && get_color_of(sibling->get_left()) == BLACK) {
+                set_color_of(sibling->get_right(), BLACK);
+                set_color_of(sibling, RED);
+                
+                this->left_rotation_at(sibling);
+            }
+
+            // CASE 8
+            if (get_color_of(cur) == BLACK && is_right_child(cur, parent) 
+                    && get_color_of(sibling) == BLACK && get_color_of(sibling->get_left()) == RED ) {
+                set_color_of(sibling, get_color_of(parent));
+                set_color_of(parent, BLACK);
+                set_color_of(sibling->get_left(), BLACK);
+
+                this->right_rotation_at(parent);
+                break;
+            }
+        }
+
+    }
 
 protected:
     virtual node_ptr put_under_node(BinaryNode<Key, Value>* node, const Key& key, const Value& value) override {
@@ -232,6 +341,71 @@ public:
             auto inserted_node = put_under_node(this->root, key, value);
             insertRBFixup(inserted_node);
         }
+    }
+
+    virtual void remove(const Key& key) override {
+        auto node_to_remove = this->has_child_with_key(this->root, key);
+        auto parent = node_to_remove->parent;
+
+        if (!node_to_remove) {
+            throw std::runtime_error("Can't remove a nonexisting key");
+        }
+
+        if (!node_to_remove->left && !node_to_remove->right) {
+            // node is leaf
+            if (node_to_remove->parent) {
+                if (node_to_remove->parent->left == node_to_remove) {
+                    node_to_remove->parent->left = nullptr;
+                } else if (node_to_remove->parent->right == node_to_remove) {
+                    node_to_remove->parent->right = nullptr;
+                }
+            } else {
+                // node_to_remove must be the root
+                this->root = nullptr;
+            }
+
+            parent = node_to_remove->parent;
+            delete node_to_remove;
+        } else if (node_to_remove->left && node_to_remove->right) {
+            // node has two children
+            auto successor = this->find_descendant_just_larger_than_key(this->root, node_to_remove->key);
+            node_to_remove->key = successor->key;
+            node_to_remove->val = successor->val;
+
+            if (successor->parent->left == successor) {
+                successor->parent->left = nullptr;
+            } else {
+                successor->parent->right = nullptr;
+            }
+
+            parent = successor->parent;
+            delete successor;
+        } else {
+            // node has one child
+            BinaryNode<Key, Value>* child;
+            if (node_to_remove->left) {
+                child = node_to_remove->left;
+            } else {
+                child = node_to_remove->right;
+            }
+
+            if (node_to_remove->parent) {
+                if (node_to_remove->parent->left == node_to_remove) {
+                    node_to_remove->parent->left = child;
+                } else {
+                    node_to_remove->parent->right = child;
+                }
+            } else {
+                this->root = child;
+                child->root = child;
+            }
+
+            parent = node_to_remove->parent;
+            delete node_to_remove;
+        }
+
+        auto rb_parent = dynamic_cast<node_ptr> (parent);
+        deleteRBFixup(rb_parent);
     }
 
 };
