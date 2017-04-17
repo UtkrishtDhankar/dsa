@@ -1,10 +1,11 @@
-#include "AVL.hpp"
+
+#include "RBTree.hpp"
 
 #include <iostream>
 #include <string>
 
 int main() {
-    cs202::AVL<int, int> bt;
+    cs202::RBTree<int, int> bt;
 
     std::string command;
     while (std::cin >> command) {
