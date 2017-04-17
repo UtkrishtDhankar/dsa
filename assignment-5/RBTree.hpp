@@ -19,20 +19,20 @@ template<class Key, class Value>
 class RBNode : public BinaryNode<Key, Value> {
 public:
     
-    Color c;
+    Color color;
 
     RBNode() {
-        c = BLACK;
+        color = BLACK;
     }
 
     RBNode(Key in_key, Value in_value, BinaryNode<Key, Value>* r, BinaryNode<Key, Value>* p)
         : BinaryNode<Key, Value> (in_key, in_value, r, p) {
-        c = BLACK;
+        color = BLACK;
     }
 
     RBNode(Key in_key, Value in_value, Color c_in, BinaryNode<Key, Value>* r, BinaryNode<Key, Value>* p)
         : BinaryNode<Key, Value> (in_key, in_value, r, p) {
-        c = c_in;	
+        color = c_in;	
     }
 
     RBNode<Key, Value>* get_parent() {return dynamic_cast<RBNode<Key, Value>*> (this->parent);}
@@ -67,7 +67,7 @@ class RBTree : public BSTree<Key, Value> {
             if (c == BLACK) {
                 return;
             } else {
-                throw std::invalid_argument("Can't set color of NIL node to black.")
+                throw std::invalid_argument("Can't set color of NIL node to black.");
             }
         } else {
             node->color = c;
@@ -134,7 +134,7 @@ class RBTree : public BSTree<Key, Value> {
             } 
 
             // CASE 4, mirror of CASE 1
-            else if (get_child_type_of(parent) == RIGHT && get_color_of(parent == RED) && get_color_of(uncle) == RED) {
+            else if (get_child_type_of(parent) == RIGHT && get_color_of(parent) == RED && get_color_of(uncle) == RED) {
                 set_color_of(parent, BLACK);
                 set_color_of(uncle, BLACK);
                 set_color_of(grandparent, RED);
@@ -167,7 +167,7 @@ class RBTree : public BSTree<Key, Value> {
 
             // CASE 6, mirror of case 3
             else if (get_child_type_of(cur) == RIGHT && get_child_type_of(parent) == RIGHT && get_color_of(parent) == RED && get_color_of(uncle) == BLACK) {
-                this->left_rotation_atgramd(parent);
+                this->left_rotation_at(grandparent);
 
                 set_color_of(parent, BLACK);
                 set_color_of(parent->get_left(), RED);
@@ -175,8 +175,9 @@ class RBTree : public BSTree<Key, Value> {
             }
 
             else {
-                // we really shouldn't be here
-                throw std::logic_error("There isn't a case like this in insertRBFixup. Something has gone horribly wrong.");
+                // this only happens when we've modified an element instead of trying to add a new one
+                // so we just return
+                return;
             }
         }
     }
@@ -197,14 +198,14 @@ protected:
             if (node->right) {
                 return put_under_node(node->right, key, value);
             } else {
-                node->right = new node_ptr (key, value, RED, this->root, node);
+                node->right = new RBNode<Key, Value>(key, value, RED, this->root, node);
                 return dynamic_cast<node_ptr> (node->right);
             }
         } else if (key < node->key) {
             if (node->left) {
                 return put_under_node(node->left, key, value);
             } else {
-                node->left = new node_ptr (key, value, RED, this->root, node);
+                node->left = new RBNode<Key, Value>(key, value, RED, this->root, node);
                 return dynamic_cast<node_ptr> (node->left);
             }
         } else {
