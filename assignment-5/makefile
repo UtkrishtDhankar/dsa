@@ -10,7 +10,10 @@ BST_SRC=BSTreeDriver.cpp
 AVL_EXEC=avl
 AVL_SRC=AVLDriver.cpp
 
-all: btree bst
+RBT_EXEC=rb
+RBT_SRC=RBTreeDriver.cpp
+
+all: btree bst avl rbt
 
 debug: CFLAGS+= -g
 debug: all
@@ -21,6 +24,9 @@ btree:
 avl:
 	$(CC) $(CFLAGS) $(AVL_SRC) -o $(AVL_EXEC)
 
+rbt:
+	$(CC) $(CFLAGS) $(RBT_SRC) -o $(RBT_EXEC)
+
 bst:
 	$(CC) $(CFLAGS) $(BST_SRC) -o $(BST_EXEC)
 
@@ -29,3 +35,4 @@ clean:
 	rm -f $(BTREE_EXEC)
 	rm -f $(BST_EXEC)
 	rm -f $(AVL_EXEC)
+	rm -f $(RBT_EXEC)
