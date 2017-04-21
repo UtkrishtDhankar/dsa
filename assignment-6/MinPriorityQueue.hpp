@@ -29,14 +29,53 @@ class MinPriorityQueue{
 		return 2 * pos + 1;
 	}
 
+	inline bool has_left_child(const size_t& pos) {
+		return left_child(pos) <= heap.size();
+	}
+
+	inline bool has_right_child(const size_t& pos) {
+		return right_child(pos) <= heap.size();
+	}
+
 	inline T& get_ith_elem(const size_t& i) {
 		// This is i - 1 as our index starts with 1, not 0
 		return heap[i - 1];
 	}
 
+	inline bool is_property_violated_at(const size_t& pos) {
+		return ((has_left_child(pos) && get_ith_elem(left_child(pos)) < get_ith_elem(pos)) || (has_right_child(pos) && get_ith_elem(right_child(pos)) < get_ith_elem(pos)));
+
+	}
+
+	inline size_t find_pos_of_min_child(const size_t& pos) {
+		size_t min = pos;
+		if (has_left_child(pos) && get_ith_elem(left_child(pos) < get_ith_elem(pos))) {
+			min = left_child(pos);
+		}
+		if (has_right_child(pos) && get_ith_elem(right_child(pos) < get_ith_elem(pos))) {
+			min = right_child(pos);
+		}
+
+		return min;
+	}
+
+	inline void swap_positions(const size_t& pos1, const size_t& pos2) {
+		T temp = get_ith_elem(pos1);
+		get_ith_elem(pos1) = get_ith_elem(pos2);
+		get_ith_elem(pos2) = temp;
+
+	}
+
 	// heapifies the heap at position pos 
 	void heapify(const size_t& pos) {
-		// TODO implement
+		size_t cur = pos;
+
+		while (is_property_violated_at(cur)) {
+			size_t min_child = find_pos_of_min_child(cur);
+			swap_positions(min_child, cur);
+
+			cur = min_child;
+		}
 	}
 
 	// build a heap from elements of a LinearList container 
