@@ -80,27 +80,24 @@ class MinPriorityQueue{
 		}
 	}
 
+	// build a heap from elements of a LinearList container 
+	// Assumes that the list is already initialised
+	void build_heap() {
+		for (size_t index = get_heap_size() / 2; index >= 1; index--) {
+			heapify(index);
+		}
+	}
+
+
 public:
 	// default constructor
 	MinPriorityQueue() : 
 		heap(4) {
 		// Nothing to do here
 	}
-
-	// build a heap from elements of a LinearList container 
-	// Assumes that the list is already initialised
-	void build_heap(const LinearList<T>& v) {
-		heap = LinearList<int>(v);
-		for (size_t index = get_heap_size() / 2; index >= 1; index--) {
-			heapify(index);
-		}
-
-	}
-
-
 	// construct a heap from the elements of a LinearList
-	MinPriorityQueue(const LinearList<T>& v) {
-		build_heap(v);
+	MinPriorityQueue(const LinearList<T>& v) : heap(v) {
+		build_heap();
 	}
 
 	MinPriorityQueue(LinearList<T>&& other) {
