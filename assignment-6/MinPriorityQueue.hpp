@@ -49,10 +49,10 @@ class MinPriorityQueue{
 
 	inline size_t find_pos_of_min_child(const size_t& pos) {
 		size_t min = pos;
-		if (has_left_child(pos) && get(left_child(pos) < get(pos))) {
+		if (has_left_child(pos) && get(left_child(pos)) < get(min)) {
 			min = left_child(pos);
 		}
-		if (has_right_child(pos) && get(right_child(pos) < get(pos))) {
+		if (has_right_child(pos) && get(right_child(pos)) < get(min)) {
 			min = right_child(pos);
 		}
 
@@ -72,6 +72,7 @@ class MinPriorityQueue{
 
 		while (is_property_violated_at(cur)) {
 			size_t min_child = find_pos_of_min_child(cur);
+
 			swap_positions(min_child, cur);
 
 			cur = min_child;
@@ -118,7 +119,14 @@ public:
 	// as well
 	T extract_min() {
 		// TODO also remove this minimum element
-		return minimum();
+		T min = minimum();
+
+		swap_positions(1, get_heap_size());
+		heap.erase_pos(get_heap_size() - 1);
+
+		heapify(1);
+
+		return min;
 	}
 
 	// return the heap size

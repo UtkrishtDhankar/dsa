@@ -13,6 +13,8 @@ int main() {
             std::cin >> key;
 
             q.insert(key);
+        } else if (command == "extract") {
+            std::cout << q.extract_min() << std::endl;
         } else if (command == "min") {
             std::cout << q.minimum() << std::endl;
         } else {
