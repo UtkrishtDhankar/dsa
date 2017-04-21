@@ -6,6 +6,7 @@
 #ifndef MIN_PRIORITY_QUEUE
 #define MIN_PRIORITY_QUEUE 1
 #include "include/seq_linear_list.hpp"
+#include <utility>
 
 namespace cs202{
  	
@@ -79,11 +80,6 @@ class MinPriorityQueue{
 		}
 	}
 
-	// build a heap from elements of a LinearList container 
-	void build_heap(const LinearList<T>& v) {
-		// TODO implement
-	}
-
 public:
 	// default constructor
 	MinPriorityQueue() : 
@@ -91,9 +87,24 @@ public:
 		// Nothing to do here
 	}
 
+	// build a heap from elements of a LinearList container 
+	// Assumes that the list is already initialised
+	void build_heap(const LinearList<T>& v) {
+		heap = LinearList<int>(v);
+		for (size_t index = get_heap_size() / 2; index >= 1; index--) {
+			heapify(index);
+		}
+
+	}
+
+
 	// construct a heap from the elements of a LinearList
 	MinPriorityQueue(const LinearList<T>& v) {
 		build_heap(v);
+	}
+
+	MinPriorityQueue(LinearList<T>&& other) {
+		heap = std::move(other.heap);
 	}
 
 	// insert a value to the heap

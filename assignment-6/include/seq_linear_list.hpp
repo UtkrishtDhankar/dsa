@@ -25,6 +25,9 @@ template<typename T>
       // Copy Constructor
       LinearList(const LinearList& other);
 
+      // Move constructor
+      LinearList(LinearList<T>&& other);
+
       // Constuctor with size and default value as input
       LinearList(const size_t& isize, const T& ival);
 
@@ -33,6 +36,9 @@ template<typename T>
 
       // Accessing an element of the LinearList using operator
       inline T& operator[](const int& i) {return buffer_[i];}
+
+      // Copy assignment
+      void operator=(const LinearList<T>& other);
 
       // Return the element in the list at position k
       inline const T& at(const int& k) const {return buffer_[k];}
@@ -140,6 +146,29 @@ template<typename T>
     for (int i = 0; i < size_; i++) {
       buffer_[i] = other.copy_at(i);
     }
+  }
+
+  template<typename T>
+  void LinearList<T>::operator=(const LinearList<T>& other) {
+    capacity_ = other.capacity_;
+    size_ = other.size_;
+
+    buffer_ = new T[capacity_];
+    for (int i = 0; i < size_; i++) {
+      buffer_[i] = other.copy_at(i);
+    }
+  }
+
+  template<typename T>
+  LinearList<T>::LinearList(LinearList<T>&& other) {
+    capacity_ = other.capacity_;
+    size_ = other.size_;
+
+    buffer_ = other.buffer_;
+
+    other.buffer_ = nullptr;
+    other.capacity_ = 0;
+    other.size_ = 0;
   }
 
   template<typename T>

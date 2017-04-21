@@ -17,6 +17,19 @@ int main() {
             std::cout << q.extract_min() << std::endl;
         } else if (command == "min") {
             std::cout << q.minimum() << std::endl;
+        } else if (command == "build") {
+            int size;
+            std::cin >> size;
+
+            cs202::LinearList<int> l(size);
+            for (int i = 0; i < size; i++) {
+                int x;
+                std::cin >> x;
+
+                l.push_back(x);
+            }
+
+            q = cs202::MinPriorityQueue<int>(l);
         } else {
             break;
         }
