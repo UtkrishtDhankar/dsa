@@ -37,22 +37,22 @@ class MinPriorityQueue{
 		return right_child(pos) <= heap.size();
 	}
 
-	inline T& get_ith_elem(const size_t& i) {
+	inline T& get(const size_t& i) {
 		// This is i - 1 as our index starts with 1, not 0
 		return heap[i - 1];
 	}
 
 	inline bool is_property_violated_at(const size_t& pos) {
-		return ((has_left_child(pos) && get_ith_elem(left_child(pos)) < get_ith_elem(pos)) || (has_right_child(pos) && get_ith_elem(right_child(pos)) < get_ith_elem(pos)));
+		return ((has_left_child(pos) && get(left_child(pos)) < get(pos)) || (has_right_child(pos) && get(right_child(pos)) < get(pos)));
 
 	}
 
 	inline size_t find_pos_of_min_child(const size_t& pos) {
 		size_t min = pos;
-		if (has_left_child(pos) && get_ith_elem(left_child(pos) < get_ith_elem(pos))) {
+		if (has_left_child(pos) && get(left_child(pos) < get(pos))) {
 			min = left_child(pos);
 		}
-		if (has_right_child(pos) && get_ith_elem(right_child(pos) < get_ith_elem(pos))) {
+		if (has_right_child(pos) && get(right_child(pos) < get(pos))) {
 			min = right_child(pos);
 		}
 
@@ -60,9 +60,9 @@ class MinPriorityQueue{
 	}
 
 	inline void swap_positions(const size_t& pos1, const size_t& pos2) {
-		T temp = get_ith_elem(pos1);
-		get_ith_elem(pos1) = get_ith_elem(pos2);
-		get_ith_elem(pos2) = temp;
+		T temp = get(pos1);
+		get(pos1) = get(pos2);
+		get(pos2) = temp;
 
 	}
 
@@ -100,10 +100,10 @@ public:
 		heap.push_back(a);
 
 		size_t index = heap.size();
-		while (index > 1 && get_ith_elem(parent(index)) > get_ith_elem(index)) {
-			T temp = get_ith_elem(index);
-			get_ith_elem(index) = get_ith_elem(parent(index));
-			get_ith_elem(parent(index)) = temp;
+		while (index > 1 && get(parent(index)) > get(index)) {
+			T temp = get(index);
+			get(index) = get(parent(index));
+			get(parent(index)) = temp;
 
 			index = parent(index);
 		}
@@ -111,7 +111,7 @@ public:
 
 	// get the minimum element from the heap
 	inline T minimum() {
-		return get_ith_elem(1);
+		return get(1);
 	}
 
 	// return the minimum element from the heap and remove it
