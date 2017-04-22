@@ -33,7 +33,7 @@ public:
 
 int main() {
 	cs202::MinPriorityQueue<Interrupt> q;
-	unsigned int current_time;
+	unsigned int current_time = 0;
 
 	std::string command;	
 	while (std::cin >> command) {
