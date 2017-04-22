@@ -119,7 +119,7 @@ public:
 	}
 
 	// get the minimum element from the heap
-	inline T minimum() {
+	inline T& minimum() {
 		return get(1);
 	}
 
