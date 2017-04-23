@@ -7,6 +7,7 @@
 #define MIN_PRIORITY_QUEUE 1
 #include "include/seq_linear_list.hpp"
 #include <utility>
+#include <stdexcept>
 
 namespace cs202{
  	
@@ -148,9 +149,22 @@ public:
 		return heap.empty();
 	}
 
+	const LinearList<T>& peak() {
+		return heap;
+	}
+
 	// heap_decrease_key function
-	void heap_decrease_key(const size_t& pos) {
-		// TODO find out what this is and implement it
+	void heap_decrease_key(const size_t& pos, T elem) {
+		if (get(pos) < elem) {
+			throw std::invalid_argument("Can't decrease key to a larger value");
+		}
+
+		get(pos) = elem;
+		size_t cur = pos;
+		while (cur != 1 && get(cur) < get(parent(cur))) {
+			swap_positions(cur, parent(cur));
+			cur = parent(cur);
+		}
 	}
 };
 
