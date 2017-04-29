@@ -44,6 +44,7 @@ int main() {
                 for (int j = 0; j < data.at(i).length(); j++) {
                     std::cout << data.at(i).at(j) << ", ";
                 }
+                std::cout << std::endl;
             }
         } else {
             break;

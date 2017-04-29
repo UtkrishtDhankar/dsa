@@ -3,6 +3,7 @@
 
 #include<cstddef>
 #include<stdexcept>
+#include<utility>
 
 namespace cs202 {
 template<typename T>
@@ -223,7 +224,7 @@ template<typename T>
 
 		if (k < size_) {
 			for (int i = size_; i >= k; i--) {
-				buffer_[i] = buffer_[i - 1];
+				buffer_[i] = std::move(buffer_[i - 1]);
 			}
 
 			buffer_[k] = item;

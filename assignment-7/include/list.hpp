@@ -79,6 +79,29 @@ public:
 		}
 	}
 
+	void operator=(const list<T>& x) {
+		node<T>* cur = first_;
+		while (cur != nullptr) {
+			node<T>* next = cur->next_;
+			delete cur;
+			cur = next;
+		}
+
+		size_ = 0;
+		first_ = nullptr;
+		end_ = nullptr;
+		append(x);
+	}
+
+	void operator=(list<T>&& x) {
+		size_ = x.size_;
+		first_ = x.first_;
+		end_ = x.end_;
+
+		x.size_ = 0;
+		x.first_ = x.end_ = nullptr;
+	}
+
 	bool has(const T& val) const {
 		node<T>* cur = first_;
 		bool found = false;
@@ -184,6 +207,10 @@ public:
 	void append(const list<T>& x) {
 		node<T>* end = get_end();
 		node<T>* cur = x.first_;
+
+		if (!cur) {
+			return;
+		}
 
 		if (end == nullptr) {
 			node<T>* new_node = new node<T>(cur->data_);

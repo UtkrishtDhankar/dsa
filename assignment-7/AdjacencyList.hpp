@@ -12,7 +12,7 @@ private:
 	LinearList<list<int> > l;	
 
 public:
-	AdjacencyList(int v) : l(v) {
+	AdjacencyList(int v) : l(v, list<int> ()) {
 	}
 
 	/* Destructor:
