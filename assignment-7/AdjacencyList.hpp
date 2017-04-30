@@ -11,6 +11,10 @@ class AdjacencyList : public GraphAdjacencyBase {
 private:
 	LinearList<list<int> > l;	
 
+	bool is_valid_index(int i, int j) const {
+		return (i < vertices() && j < vertices());
+	}
+
 public:
 	AdjacencyList(int v) : l(v, list<int> ()) {
 	}
@@ -27,7 +31,11 @@ public:
 	 * Returns true if an edge exists between vertices i and j, false otherwise.
 	 */
 	virtual bool edgeExits(int i, int j) const override {
-		return l.at(i).has(j);
+		if (is_valid_index(i, j)) {
+			return l.at(i).has(j);
+		} else {
+			return false;
+		}
 	}
 	/*
 	 * Function: vertices
@@ -53,13 +61,22 @@ public:
 	 * Adds an edge between vertices i and j, from i to j
 	 */
 	virtual void add(int i, int j) override {
-		l[i].append(j);
+		if (!is_valid_index(i, j)) {
+			throw std::invalid_argument("Invalid index for adjacency list.");
+		}
+
+		if (!l[i].has(j))
+			l[i].append(j);
 	}
 	/*
 	 * Function: remove
 	 * Deleted the edge between vertices i and j, from i to j
 	 */
 	virtual void remove(int i, int j) override {
+		if (!is_valid_index(i, j)) {
+			throw std::invalid_argument("Invalid index for adjacency list.");
+		}
+
 		l[i].remove(j);
 	}
 	/*
@@ -67,6 +84,10 @@ public:
 	 * Returns the degree of the vertex i
 	 */
 	virtual int degree(int i) const override {
+		if (!is_valid_index(i, 0)) {
+			throw std::invalid_argument("Invalid index for adjacency list.");
+		}
+
 		return l.at(i).length();
 	}
 
