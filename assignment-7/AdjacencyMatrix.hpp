@@ -47,28 +47,28 @@ public:
 	/* Destructor:
 	 * releases all resources acquired by the class
 	 */
-	virtual ~AdjacencyMatrix() {
+	virtual ~AdjacencyMatrix() override {
 		// no need to do anything, the matrix will delete itself
 	}
 	/*
 	 * Function: edgeExists
 	 * Returns true if an edge exists between vertices i and j, false otherwise.
 	 */
-	virtual bool edgeExits(int i, int j) const {
+	virtual bool edgeExits(int i, int j) const override {
 		return (const_get(i, j) != 0);
 	}
 	/*
 	 * Function: vertices
 	 * Returns the number of vertices in the adjacency structure.
 	 */
-	virtual int vertices() const {
+	virtual int vertices() const override {
 		return v;		
 	}
 	/*
 	 * Function: edges
 	 * Returns the number of edges in the adjacency structure.
 	 */
-	virtual int edges() const {
+	virtual int edges() const override {
 		int edges = 0;
 		for (int i = 0; i < v; i++) {
 			for (int j = 0; j < v; j++) {
@@ -84,21 +84,21 @@ public:
 	 * Function add:
 	 * Adds an edge between vertices i and j
 	 */
-	virtual void add(int i, int j) {
+	virtual void add(int i, int j) override {
 		get(i, j) = 1;		
 	}
 	/*
 	 * Function: remove
 	 * Deleted the edge between vertices i and j
 	 */
-	virtual void remove(int i, int j) {
+	virtual void remove(int i, int j) override {
 		get(i, j) = 0;
 	}
 	/*
 	 * Function: degree
 	 * Returns the degree of the vertex i
 	 */
-	virtual int degree(int i) const {
+	virtual int outdegree(int i) const override {
 		int d = 0;
 
 		for (int j = 0; j < v; j++) {
@@ -108,6 +108,17 @@ public:
 		}	
 
 		return d;
+	}
+	
+	virtual int indegree(int i) const override {
+		int edges = 0;
+		for (int j = 0; j < vertices(); j++) {
+			if (edgeExits(j, i)) {
+				edges++;
+			}
+		}
+
+		return edges;
 	}
 
 	const LinearList<int>& peak() const {

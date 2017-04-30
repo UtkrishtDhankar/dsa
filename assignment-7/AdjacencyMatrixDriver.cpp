@@ -22,11 +22,16 @@ int main() {
             std::cin >> from >> to;
 
             l.remove(from, to);
-        } else if (command == "degree") {
+        } else if (command == "outdegree") {
             int v;
             std::cin >> v;
 
-            std::cout << l.degree(v) << std::endl;
+            std::cout << l.outdegree(v) << std::endl;
+        } else if (command == "indegree") {
+            int v;
+            std::cin >> v;
+
+            std::cout << l.indegree(v) << std::endl;
         } else if (command == "exists") {
             int from, to;
             std::cin >> from >> to;

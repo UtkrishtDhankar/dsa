@@ -79,16 +79,28 @@ public:
 
 		l[i].remove(j);
 	}
-	/*
-	 * Function: degree
-	 * Returns the degree of the vertex i
-	 */
-	virtual int degree(int i) const override {
+
+	virtual int outdegree(int i) const override {
 		if (!is_valid_index(i, 0)) {
 			throw std::invalid_argument("Invalid index for adjacency list.");
 		}
 
 		return l.at(i).length();
+	}
+
+	virtual int indegree(int i) const override {
+		if (!is_valid_index(i, 0)) {
+			throw std::invalid_argument("Invalid index for adjacency list.");
+		}
+
+		int edges = 0;
+		for (int j = 0; j < vertices(); j++) {
+			if (edgeExits(j, i)) {
+				edges++;
+			}
+		}
+
+		return edges;
 	}
 
 	const LinearList<list<int> >& peak() const {
