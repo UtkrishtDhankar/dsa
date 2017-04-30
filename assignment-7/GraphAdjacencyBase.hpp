@@ -1,5 +1,8 @@
 #ifndef GRAPH_ADJACENCY_BAG
 #define GRAPH_ADJACENCY_BAG 1
+
+namespace cs202 {
+
 /*
  * A base class which can denote any Graph Adjacency representation.
  * Subclasse by AdjacencyMatrix and AdjacencyList
@@ -42,6 +45,10 @@ public:
 	 * Function: degree
 	 * Returns the degree of the vertex i
 	 */
-	virtual int degree(int i) const = 0;
+	virtual int indegree(int i) const = 0;
+	virtual int outdegree(int i) const = 0;
 };
+
+}
+
 #endif /* ifndef GRAPH_ADJACENCY_BAG */
