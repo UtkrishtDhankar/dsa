@@ -90,7 +90,7 @@ public:
 	 */
 	virtual void dfs(int source, void (*work)(int&)) override {
 		if (source >= vertices() || source < 0) {
-			throw std::invalid_argument("Source for BFS must be a valid vertex.");
+			throw std::invalid_argument("Source for DFS must be a valid vertex.");
 		}
 
 		stack<int> s;

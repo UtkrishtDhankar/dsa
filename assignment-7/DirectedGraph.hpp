@@ -1,6 +1,9 @@
 #ifndef DIRECTED_GRAPH
 #define DIRECTED_GRAPH 1
 
+#include "include/queue.hpp"
+#include "include/stack.hpp"
+
 #include "AbstractGraph.hpp"
 #include "GraphAdjacencyBase.hpp"
 #include "AdjacencyList.hpp"
@@ -83,16 +86,79 @@ public:
 	 * Does a depth first traversal of the entire graph.
 	 * Runs the given function work, with the value of each vertex.
 	 */
-	virtual void dfs(void (*work)(int&)) override {
+	virtual void dfs(int source, void (*work)(int&)) override {
+		if (source >= vertices() || source < 0) {
+			throw std::invalid_argument("Source for DFS must be a valid vertex.");
+		}
 
+		stack<int> s;
+		LinearList<int> pred(vertices(), -1); // Having a predecessor of -1 means that it has no predecessor
+		LinearList<int> color(vertices(), WHITE);
+		int nodes_visited = 1;
+
+		while (nodes_visited <= vertices()) {
+			color[source] = GRAY;
+			s.push(source);
+
+			while (!s.empty()) {
+				int current = s.pop();
+				color[current] = BLACK;
+				nodes_visited++;
+
+				// Get all adjacent nodes of current into the q
+				list<int> adjacents = g->adjacentVertices(current);
+				for (int adjacent : adjacents) {
+					if (color[adjacent] == WHITE) {
+						s.push(adjacent);
+						color[adjacent] = GRAY;
+						pred[adjacent] = current;
+					}
+				}
+
+				work(current);
+			}
+
+			for (int i = 0; i < vertices(); i++) {
+				if (color[i] == WHITE) {
+					source = i;
+					break;
+				}
+			}
+		}
 	}
 	/*
 	 * Function bfs:
 	 * Does a breadth first traversal of the entire graph.
 	 * Runs the given function work, with the value of each vertex.
 	 */
-	virtual void bfs(void (*work)(int&)) override {
-		
+	virtual void bfs(int source, void (*work)(int&)) override {
+		if (source >= vertices() || source < 0) {
+			throw std::invalid_argument("Source for BFS must be a valid vertex.");
+		}
+
+		queue<int> q;
+		LinearList<int> pred(vertices(), -1); // Having a predecessor of -1 means that it has no predecessor
+		LinearList<int> color(vertices(), WHITE);
+
+		color[source] = GRAY;
+		q.push(source);
+
+		while (!q.empty()) {
+			int current = q.pop();
+			color[current] = BLACK;
+
+			// Get all adjacent nodes of current into the q
+			list<int> adjacents = g->adjacentVertices(current);
+			for (int adjacent : adjacents) {
+				if (color[adjacent] == WHITE) {
+					q.push(adjacent);
+					color[adjacent] = GRAY;
+					pred[adjacent] = current;
+				}
+			}
+
+			work(current);
+		}
 	}
 	/*
 	 * Function: indegree
