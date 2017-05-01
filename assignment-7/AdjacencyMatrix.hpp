@@ -121,6 +121,22 @@ public:
 		return edges;
 	}
 
+	virtual const list<int> adjacentVertices(int i) const override {
+		if (!is_valid_index(i, 0)) {
+			throw std::invalid_argument("Invalid index for adjacency list.");
+		}
+
+		list<int> adjacents;
+		for (int j = 0; j < vertices(); j++) {
+			if (edgeExits(i, j)) {
+				adjacents.append(j);
+			}
+		}
+
+		return adjacents;
+	}
+
+
 	const LinearList<int>& peak() const {
 		return matrix;
 	}

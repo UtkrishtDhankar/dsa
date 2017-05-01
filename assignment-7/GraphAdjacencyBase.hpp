@@ -1,6 +1,8 @@
 #ifndef GRAPH_ADJACENCY_BAG
 #define GRAPH_ADJACENCY_BAG 1
 
+#include "include/list.hpp"
+
 namespace cs202 {
 
 /*
@@ -46,7 +48,10 @@ public:
 	 * Returns the degree of the vertex i
 	 */
 	virtual int indegree(int i) const = 0;
+
 	virtual int outdegree(int i) const = 0;
+
+	virtual const list<int> adjacentVertices(int i) const = 0;
 };
 
 }

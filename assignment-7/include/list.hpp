@@ -258,6 +258,28 @@ public:
 		return cur->data_;
 	}
 
+	class iterator{
+		private:
+			node<T>* elem_;
+		public:
+			iterator() {elem_ = nullptr;}
+			iterator(node<T>* ptr) {elem_ = ptr;}
+			~iterator(){}
+			T& operator*(){return elem_->data_;}
+			void operator=(node<T> *ptr){elem_ = ptr;}
+			void operator=(iterator iter){elem_ = iter.elem_;}
+			iterator& operator++(){elem_ = elem_->next_; return *this;}
+			iterator operator++(int){iterator it = *this; elem_ = elem_->next_; return it;}
+			bool operator!=(node<T>* ptr){return (elem_ != ptr);};
+			bool operator==(node<T>* ptr){return (elem_ == ptr);}
+			bool operator!=(iterator iter){return (elem_ != iter.elem_);}
+			bool operator==(iterator iter){return (elem_ == iter.elem_);}
+	};
+
+	iterator begin() {return iterator(first_);}
+	iterator end() {return nullptr;}
+
+
 protected:
 	node<T>* first_;
 	node<T>* end_;

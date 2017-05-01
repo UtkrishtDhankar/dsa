@@ -103,6 +103,14 @@ public:
 		return edges;
 	}
 
+	virtual const list<int> adjacentVertices(int i) const override {
+		if (!is_valid_index(i, 0)) {
+			throw std::invalid_argument("Invalid index for adjacency list.");
+		}
+
+		return l.at(i);
+	}
+
 	const LinearList<list<int> >& peak() const {
 		return l;
 	}

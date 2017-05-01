@@ -3,6 +3,10 @@
 #include <iostream>
 #include <string>
 
+void print_node(int& node) {
+    std::cout << node << " ";
+}
+
 int main() {
     int n;
     std::cout << "Enter the size of the list: ";
@@ -49,6 +53,18 @@ int main() {
             std::cout << l.vertices() << std::endl;
         } else if (command == "edges") {
             std::cout << l.edges() << std::endl;
+        } else if (command == "bfs") {
+            int source;
+            std::cin >> source;            
+
+            l.bfs(source, &print_node);
+            std::cout << std::endl;
+        } else if (command == "dfs") {
+            int source;
+            std::cin >> source;            
+
+            l.dfs(source, &print_node);
+            std::cout << std::endl;
             // TODO implement peak function for this
         } else {
             break;
