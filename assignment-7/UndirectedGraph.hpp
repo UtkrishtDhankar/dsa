@@ -89,7 +89,44 @@ public:
 	 * Runs the given function work, with the value of each vertex.
 	 */
 	virtual void dfs(int source, void (*work)(int&)) override {
-		
+		if (source >= vertices() || source < 0) {
+			throw std::invalid_argument("Source for BFS must be a valid vertex.");
+		}
+
+		stack<int> s;
+		LinearList<int> pred(vertices(), -1); // Having a predecessor of -1 means that it has no predecessor
+		LinearList<int> color(vertices(), WHITE);
+		int nodes_visited = 1;
+
+		while (nodes_visited <= vertices()) {
+			color[source] = GRAY;
+			s.push(source);
+
+			while (!s.empty()) {
+				int current = s.pop();
+				color[current] = BLACK;
+				nodes_visited++;
+
+				// Get all adjacent nodes of current into the q
+				list<int> adjacents = g->adjacentVertices(current);
+				for (int adjacent : adjacents) {
+					if (color[adjacent] == WHITE) {
+						s.push(adjacent);
+						color[adjacent] = GRAY;
+						pred[adjacent] = current;
+					}
+				}
+
+				work(current);
+			}
+
+			for (int i = 0; i < vertices(); i++) {
+				if (color[i] == WHITE) {
+					source = i;
+					break;
+				}
+			}
+		}
 	}
 	/*
 	 * Function bfs:
