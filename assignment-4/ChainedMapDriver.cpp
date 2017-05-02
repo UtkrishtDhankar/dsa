@@ -2,12 +2,16 @@
 
 #include "ChainedMap.hpp"
 
+namespace cs202 {
+
 template<>
-struct cs202::hash<int> {
+struct hash<int> {
 unsigned long long operator() (int k) const {
   return (unsigned long long) k;
 }
 };
+
+}
 
 int main()
 {
