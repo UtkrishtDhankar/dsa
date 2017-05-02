@@ -83,6 +83,11 @@ public:
 		g->remove(i, j);
 		g->remove(j, i);
 	}
+
+	virtual list<int> adjacentVertices(int i) const override {
+		return g->adjacentVertices(i);
+	}
+
 	/*
 	 * Function dfs:
 	 * Does a depth first traversal of the entire graph.

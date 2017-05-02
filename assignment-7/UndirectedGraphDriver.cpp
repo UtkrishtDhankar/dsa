@@ -65,7 +65,17 @@ int main() {
 
             l.dfs(source, &print_node);
             std::cout << std::endl;
-            // TODO implement peak function for this
+        } else if (command == "display") {
+            for (int i = 0; i < l.vertices(); i++) {
+                std::cout << i << ": ";
+                cs202::list<int> adjacents = l.adjacentVertices(i);
+
+                for (auto adjacent : adjacents) {
+                    std::cout << adjacent << " ";
+                }
+
+                std::cout << std::endl;
+            }
         } else {
             break;
         }

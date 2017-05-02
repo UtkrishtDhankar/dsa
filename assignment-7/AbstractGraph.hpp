@@ -1,6 +1,8 @@
 #ifndef ABSTRACT_GRAPH
 #define ABSTRACT_GRAPH 1
 
+#include "include/list.hpp"
+
 namespace cs202 {
 
 enum GraphMode
@@ -52,6 +54,8 @@ class AbstractGraph {
 	 * Deleted the edge between vertices i and j
 	 */
 	virtual void remove(int i, int j) = 0;
+
+	virtual list<int> adjacentVertices(int i) const = 0;
 	/*
 	 * Function dfs:
 	 * Does a depth first traversal of the entire graph.
