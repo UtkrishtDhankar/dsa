@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-std=c++11 -Wall -Werror
+CFLAGS=-std=c++11
 
 BTREE_EXEC=btree
 BTREE_SRC=BinaryTreeDriver.cpp

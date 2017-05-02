@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-std=c++11 -Wall -Werror
+CFLAGS=-std=c++11
 
 CHAINED_EXEC=chained
 CHAINED_SRC=ChainedMapDriver.cpp

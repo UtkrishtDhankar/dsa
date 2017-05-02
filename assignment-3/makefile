@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-std=c++11 -Wall -Werror
+CFLAGS=-std=c++11
 
 LIST_EXEC=list
 LIST_SRC=list_tester.cpp
