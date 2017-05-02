@@ -3,8 +3,8 @@ language: c++
 # from https://github.com/datagraph/libsparql/blob/master/.travis.yml
 # installs GCC so that it can use C++11, by default the GCC is quite old
 before_install:
-  sudo apt-get update -qq
-  sudo apt-get install -qq g++-4.8
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq g++-4.8
 
 script:
   - make -C assignment-3/
