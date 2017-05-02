@@ -2,8 +2,10 @@
 
 #include "DoubleHashMap.hpp"
 
+namespace cs202 {
+
 template<>
-struct cs202::hash<int> {
+struct hash<int> {
   int m;
 
   hash(int m_in) {m = m_in;}
@@ -12,6 +14,8 @@ struct cs202::hash<int> {
     return (unsigned long long) k % m;
   }
 };
+
+}
 
 int main()
 {

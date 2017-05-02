@@ -3,8 +3,10 @@
 
 #include "DoubleHashMap.hpp"
 
+namespace cs202 {
+
 template<>
-struct cs202::hash<std::string> {
+struct hash<std::string> {
 private:
   unsigned long long m;
 public:
@@ -21,6 +23,8 @@ public:
     return hash;
   }
 };
+
+}
 
 int main()
 {

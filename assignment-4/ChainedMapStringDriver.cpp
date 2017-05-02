@@ -3,8 +3,10 @@
 
 #include "ChainedMap.hpp"
 
+namespace cs202 {
+
 template<>
-struct cs202::hash<std::string> {
+struct hash<std::string> {
   // djb2 by Dan Bernstein
   unsigned long long operator() (std::string str) const {
     unsigned long long hash = 5381;
@@ -16,6 +18,8 @@ struct cs202::hash<std::string> {
     return hash;
   }
 };
+
+}
 
 int main()
 {
