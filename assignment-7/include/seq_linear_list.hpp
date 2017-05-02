@@ -69,7 +69,7 @@ template<typename T>
 			// Find the index of first occurence of an item in the list
 			// Return size of list if item not found
 			// 0-based indexing
-			int find(const T& item);
+			int find(const T& item) const;
 
 			// Remove all occurences of an item in the list
 			void erase(const T& item);
@@ -258,7 +258,7 @@ template<typename T>
 	}
 
 	template<typename T>
-	int LinearList<T>::find(const T& item) {
+	int LinearList<T>::find(const T& item) const {
 		for (int i = 0; i < size_; i++) {
 			if (buffer_[i] == item) {
 				return i;
