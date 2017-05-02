@@ -1,0 +1,9 @@
+language: c++
+script:
+  - make -C assignment-1/
+  - make -C assignment-2/
+  - make -C assignment-3/
+  - make -C assignment-4/
+  - make -C assignment-5/
+  - make -C assignment-6/
+  - make -C assignment-7/
