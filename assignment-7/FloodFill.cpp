@@ -61,6 +61,26 @@ cs202::UndirectedGraph build_graph(int width, int  height, const cs202::LinearLi
 	return graph;
 }
 
+void no_work(int& param) {
+
+}
+
+cs202::list<int> path_from_pred(cs202::LinearList<int> pred, int source, int dest) {
+	cs202::list<int> path;
+
+	int cur = dest;
+	while (cur != -1) {
+		path.cons(cur);
+		cur = pred[cur];
+	}
+
+	if (path[0] == source) {
+		return path;
+	} else {
+		return cs202::list<int> (); // no path exists, so we should return an empty list
+	}
+}
+
 int main()
 {
 	int width, height; 
@@ -85,16 +105,20 @@ int main()
 
 	cs202::UndirectedGraph graph = build_graph(width, height, inaccessible_points);
 
-	for (int i = 0; i < graph.vertices(); i++) {
-		Point p = point_from_index(i, width);
-		std::cout << "(" << p.x << ", " << p.y << ") " << ": ";
+	cs202::LinearList<int> pred = graph.dfs(index_of(source.x, source.y, width), &no_work);
+	cs202::list<int> path = path_from_pred(pred, index_of(source.x, source.y, width), index_of(dest.x, dest.y, width));
 
-		cs202::list<int> adjacents = graph.adjacentVertices(i);
-		for (auto adjacent : adjacents) {
-			Point p = point_from_index(adjacent, width);
-			std::cout << "(" << p.x << ", " << p.y << ") ";
+	if (path.empty()) {
+		std::cout << "Can't reach destination from source." << std::endl;
+	} else {
+		std::cout << "Can reach the destination from the source. Here's the path: " << std::endl;
+
+		for (auto elem : path) {
+			Point p = point_from_index(elem, width);
+			std::cout << "(" << p.x << ", " << p.y << ") " << " ";
 		}
-
 		std::cout << std::endl;
 	}
+
+	return 0;
 }

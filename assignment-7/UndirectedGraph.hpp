@@ -93,7 +93,7 @@ public:
 	 * Does a depth first traversal of the entire graph.
 	 * Runs the given function work, with the value of each vertex.
 	 */
-	virtual void dfs(int source, void (*work)(int&)) override {
+	virtual LinearList<int> dfs(int source, void (*work)(int&)) override {
 		if (source >= vertices() || source < 0) {
 			throw std::invalid_argument("Source for DFS must be a valid vertex.");
 		}
@@ -125,20 +125,22 @@ public:
 				work(current);
 			}
 
-			for (int i = 0; i < vertices(); i++) {
+			for (int i = source; i < vertices(); i++) {
 				if (color[i] == WHITE) {
 					source = i;
 					break;
 				}
 			}
 		}
+
+		return pred;
 	}
 	/*
 	 * Function bfs:
 	 * Does a breadth first traversal of the entire graph.
 	 * Runs the given function work, with the value of each vertex.
 	 */
-	virtual void bfs(int source, void (*work)(int&)) override {
+	virtual LinearList<int> bfs(int source, void (*work)(int&)) override {
 		if (source >= vertices() || source < 0) {
 			throw std::invalid_argument("Source for BFS must be a valid vertex.");
 		}
@@ -166,6 +168,8 @@ public:
 
 			work(current);
 		}
+
+		return pred;
 	}
 	/*
 	 * Returns the degree of the vertex.

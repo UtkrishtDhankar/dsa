@@ -2,6 +2,7 @@
 #define ABSTRACT_GRAPH 1
 
 #include "include/list.hpp"
+#include "include/seq_linear_list.hpp"
 
 namespace cs202 {
 
@@ -61,13 +62,13 @@ class AbstractGraph {
 	 * Does a depth first traversal of the entire graph.
 	 * Runs the given function work, with the value of each vertex.
 	 */
-	virtual void dfs(int source, void (*work)(int&)) = 0;
+	virtual LinearList<int> dfs(int source, void (*work)(int&)) = 0;
 	/*
 	 * Function bfs:
 	 * Does a breadth first traversal of the entire graph.
 	 * Runs the given function work, with the value of each vertex.
 	 */
-	virtual void bfs(int source, void (*work)(int&)) = 0;
+	virtual LinearList<int> bfs(int source, void (*work)(int&)) = 0;
 };
 
 }
