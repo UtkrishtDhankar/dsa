@@ -1,11 +1,5 @@
-language: c++
-
-# from https://github.com/datagraph/libsparql/blob/master/.travis.yml
-# installs GCC so that it can use C++11, by default the GCC is quite old
-before_install:
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y;
-  - sudo apt-get update -qq
-  - sudo apt-get install g++-4.9
+language: cpp
+dist: trusty
 
 script:
   - make -C assignment-3/
