@@ -1,6 +1,7 @@
 #include "UndirectedGraph.hpp"
 
 #include <iostream>
+#include <fstream>
 #include <string>
 
 void print_node(int& node) {
@@ -44,6 +45,24 @@ int main() {
             std::cin >> v;
 
             std::cout << l.degree(v) << std::endl;
+        } else if (command == "read") {
+            l = cs202::UndirectedGraph(n, mode);
+
+            std::string filename;
+            std::cin >> filename;
+
+            std::ifstream f;
+            f.open(filename);
+            for (int x = 0; x < n; x++) {
+                for (int y = 0; y < n; y++) {
+                    int num;
+                    f >> num;
+
+                    if (num) {
+                        l.add(x, y);
+                    }
+                }
+            }
         } else if (command == "exists") {
             int from, to;
             std::cin >> from >> to;
