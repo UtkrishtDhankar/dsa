@@ -122,7 +122,7 @@ template<typename T>
 	LinearList<T>::LinearList(const size_t& isize) {
 		buffer_ = new T[isize];
 
-		size_ = 0;
+		size_ = isize;
 		capacity_ = isize;
 	}
 
