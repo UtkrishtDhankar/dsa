@@ -4,6 +4,8 @@
 #include "include/list.hpp"
 #include "include/seq_linear_list.hpp"
 
+#include "GraphAdjacencyBase.hpp"
+
 namespace cs202 {
 
 enum GraphMode
@@ -49,14 +51,14 @@ class AbstractGraph {
 	 * Function add:
 	 * Adds an edge between vertices i and j
 	 */
-	virtual void add(int i, int j) = 0;
+	virtual void add(int i, int j, int weight) = 0;
 	/*
 	 * Function: remove
 	 * Deleted the edge between vertices i and j
 	 */
 	virtual void remove(int i, int j) = 0;
 
-	virtual list<int> adjacentVertices(int i) const = 0;
+	virtual list<GraphEdge> adjacentVertices(int i) const = 0;
 	/*
 	 * Function dfs:
 	 * Does a depth first traversal of the entire graph.

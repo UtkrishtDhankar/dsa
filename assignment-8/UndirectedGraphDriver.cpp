@@ -31,10 +31,10 @@ int main() {
     std::string command;
     while (std::cin >> command) {
         if (command == "add") {
-            int from, to;
-            std::cin >> from >> to;
+            int from, to, weight;
+            std::cin >> from >> to >> weight;
 
-            l.add(from, to);
+            l.add(from, to, weight);
         } else if (command == "remove") {
             int from, to;
             std::cin >> from >> to;
@@ -59,7 +59,7 @@ int main() {
                     f >> num;
 
                     if (num) {
-                        l.add(x, y);
+                        l.add(x, y, num);
                     }
                 }
             }
@@ -87,12 +87,11 @@ int main() {
         } else if (command == "display") {
             for (int i = 0; i < l.vertices(); i++) {
                 std::cout << i << ": ";
-                cs202::list<int> adjacents = l.adjacentVertices(i);
 
-                for (auto adjacent : adjacents) {
-                    std::cout << adjacent << " ";
+                cs202::list<cs202::GraphEdge> adjacents = l.adjacentVertices(i);
+                for (const cs202::GraphEdge& elem : adjacents) {
+                    std::cout << "-" << elem.weight << "-> " << elem.dest << ", ";
                 }
-
                 std::cout << std::endl;
             }
         } else {

@@ -71,9 +71,9 @@ public:
 	 * Function add:
 	 * Adds an edge between vertices i and j
 	 */
-	virtual void add(int i, int j) override {
-		g->add(i, j);
-		g->add(j, i);
+	virtual void add(int i, int j, int weight) override {
+		g->add(i, j, weight);
+		g->add(j, i, weight);
 	}
 	/*
 	 * Function: remove
@@ -84,7 +84,7 @@ public:
 		g->remove(j, i);
 	}
 
-	virtual list<int> adjacentVertices(int i) const override {
+	virtual list<GraphEdge> adjacentVertices(int i) const override {
 		return g->adjacentVertices(i);
 	}
 
@@ -113,12 +113,12 @@ public:
 				nodes_visited++;
 
 				// Get all adjacent nodes of current into the q
-				list<int> adjacents = g->adjacentVertices(current);
-				for (int adjacent : adjacents) {
-					if (color[adjacent] == WHITE) {
-						s.push(adjacent);
-						color[adjacent] = GRAY;
-						pred[adjacent] = current;
+				list<GraphEdge> adjacents = g->adjacentVertices(current);
+				for (GraphEdge adjacent : adjacents) {
+					if (color[adjacent.dest] == WHITE) {
+						s.push(adjacent.dest);
+						color[adjacent.dest] = GRAY;
+						pred[adjacent.dest] = current;
 					}
 				}
 
@@ -157,12 +157,12 @@ public:
 			color[current] = BLACK;
 
 			// Get all adjacent nodes of current into the q
-			list<int> adjacents = g->adjacentVertices(current);
-			for (int adjacent : adjacents) {
-				if (color[adjacent] == WHITE) {
-					q.push(adjacent);
-					color[adjacent] = GRAY;
-					pred[adjacent] = current;
+			list<GraphEdge> adjacents = g->adjacentVertices(current);
+			for (GraphEdge adjacent : adjacents) {
+				if (color[adjacent.dest] == WHITE) {
+					q.push(adjacent.dest);
+					color[adjacent.dest] = GRAY;
+					pred[adjacent.dest] = current;
 				}
 			}
 
