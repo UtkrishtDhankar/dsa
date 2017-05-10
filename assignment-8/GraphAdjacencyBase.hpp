@@ -5,6 +5,12 @@
 
 namespace cs202 {
 
+class GraphEdge {
+public:
+	int dest;
+	int weight;
+}
+
 /*
  * A base class which can denote any Graph Adjacency representation.
  * Subclasse by AdjacencyMatrix and AdjacencyList
@@ -37,7 +43,7 @@ public:
 	 * Function add:
 	 * Adds an edge between vertices i and j
 	 */
-	virtual void add(int i, int j) = 0;
+	virtual void add(int i, int j, int weight) = 0;
 	/*
 	 * Function: remove
 	 * Deleted the edge between vertices i and j
@@ -51,7 +57,7 @@ public:
 
 	virtual int outdegree(int i) const = 0;
 
-	virtual const list<int> adjacentVertices(int i) const = 0;
+	virtual const list<GraphEdge> adjacentVertices(int i) const = 0;
 };
 
 }
