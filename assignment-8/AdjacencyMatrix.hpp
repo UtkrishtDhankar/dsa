@@ -84,8 +84,8 @@ public:
 	 * Function add:
 	 * Adds an edge between vertices i and j
 	 */
-	virtual void add(int i, int j) override {
-		get(i, j) = 1;		
+	virtual void add(int i, int j, int weight) override {
+		get(i, j) = weight;		
 	}
 	/*
 	 * Function: remove
@@ -121,15 +121,15 @@ public:
 		return edges;
 	}
 
-	virtual const list<int> adjacentVertices(int i) const override {
+	virtual const list<GraphEdge> adjacentVertices(int i) const override {
 		if (!is_valid_index(i, 0)) {
 			throw std::invalid_argument("Invalid index for adjacency list.");
 		}
 
-		list<int> adjacents;
+		list<GraphEdge> adjacents;
 		for (int j = 0; j < vertices(); j++) {
 			if (edgeExits(i, j)) {
-				adjacents.append(j);
+				adjacents.append(GraphEdge(j, const_get(i, j)));
 			}
 		}
 
