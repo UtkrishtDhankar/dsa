@@ -114,7 +114,7 @@ public:
 			cur = cur->next_;
 		}
 
-		return found;
+		return found; 
 	}
 
 	/*
@@ -278,6 +278,19 @@ public:
 
 	iterator begin() {return iterator(first_);}
 	iterator end() {return nullptr;}
+
+	iterator search(const T& val) {
+		node<T>* cur = first_;
+		while (cur != nullptr) {
+			if (cur->data_ == val) {
+				break;
+			}
+
+			cur = cur->next_;
+		}
+
+		return iterator(cur);
+	}
 
 
 protected:

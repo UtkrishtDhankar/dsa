@@ -13,10 +13,10 @@ int main() {
     std::string command;
     while (std::cin >> command) {
         if (command == "add") {
-            int from, to;
-            std::cin >> from >> to;
+            int from, to, weight;
+            std::cin >> from >> to >> weight;
 
-            l.add(from, to);
+            l.add(from, to, weight);
         } else if (command == "remove") {
             int from, to;
             std::cin >> from >> to;
@@ -42,12 +42,12 @@ int main() {
         } else if (command == "edges") {
             std::cout << l.edges() << std::endl;
         } else if (command == "peak") {
-            const auto& data = l.peak();
-            for (int i = 0; i < data.size(); i++) {
+            for (int i = 0; i < l.vertices(); i++) {
                 std::cout << i << ": ";
 
-                for (int j = 0; j < data.at(i).length(); j++) {
-                    std::cout << data.at(i).at(j) << ", ";
+                cs202::list<cs202::GraphEdge> adjacents = l.adjacentVertices(i);
+                for (const cs202::GraphEdge& elem : adjacents) {
+                    std::cout << "-" << elem.weight << "-> " << elem.dest << ", ";
                 }
                 std::cout << std::endl;
             }

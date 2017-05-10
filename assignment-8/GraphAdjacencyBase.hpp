@@ -9,7 +9,21 @@ class GraphEdge {
 public:
 	int dest;
 	int weight;
-}
+
+	GraphEdge() {
+		dest = weight = 0;
+	}
+
+	GraphEdge(int d, int w) {
+		dest = d; weight = w;
+	}
+
+	// Use this for comparing if edges have equal destinations
+	// Useful because it helps with easily reusing old code
+	bool operator==(const GraphEdge& other) {
+		return dest == other.dest;
+	}
+};
 
 /*
  * A base class which can denote any Graph Adjacency representation.
@@ -24,6 +38,7 @@ public:
 	virtual ~GraphAdjacencyBase() {
 
 	}
+
 	/*
 	 * Function: edgeExists
 	 * Returns true if an edge exists between vertices i and j, false otherwise.
