@@ -71,11 +71,6 @@ class AbstractGraph {
 	 * Runs the given function work, with the value of each vertex.
 	 */
 	virtual LinearList<int> bfs(int source, void (*work)(int&)) = 0;
-
-	/*
-	 * Finds the MST of this graph
-	 */
-	virtual LinearList<int> kruskal() = 0;
 };
 
 }

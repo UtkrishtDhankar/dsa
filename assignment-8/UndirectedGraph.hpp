@@ -227,19 +227,20 @@ public:
 		return pred;
 	}
 
-	virtual LinearList<int> kruskal() override {
-		LinearList<int> pred(vertices(), -1);		
+	UndirectedGraph kruskal() {
+
+		UndirectedGraph mst(vertices(), GraphMode::LIST);
 		UFDS disjointSet(vertices());
 
 		LinearList<MSTEdge> edges = getEdges();
 		for (int i = 0; i < edges.size(); i++) {
 			if (disjointSet.find_set(edges[i].source) != disjointSet.find_set(edges[i].dest)) {
-				pred[edges[i].dest] = edges[i].source;
+				mst.add(edges[i].source, edges[i].dest, edges[i].weight);
 				disjointSet.union_set(edges[i].source, edges[i].dest);
 			}
 		}
 
-		return pred;
+		return mst;
 	}
 
 	/*
