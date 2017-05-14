@@ -84,6 +84,13 @@ int main() {
 
             l.dfs(source, &print_node);
             std::cout << std::endl;
+        } else if (command == "kruskal") {
+            cs202::LinearList<int> pred = l.kruskal();
+
+            for (auto elem : pred) {
+                std::cout << elem << " ";
+            }
+            std::cout << std::endl;
         } else if (command == "display") {
             for (int i = 0; i < l.vertices(); i++) {
                 std::cout << i << ": ";

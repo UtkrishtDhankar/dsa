@@ -11,14 +11,69 @@
 #include "GraphAdjacencyBase.hpp"
 #include "AdjacencyList.hpp"
 #include "AdjacencyMatrix.hpp"
-
+#include "UFDS.hpp"
+#include "include/sorting.hpp"
 
 namespace cs202 {
+
+class MSTEdge {
+public:
+	int source;
+	int dest;
+	int weight;
+
+	MSTEdge() {
+		source = dest = weight = 0;
+	}
+
+	MSTEdge(int s, int d, int w) {
+		source = s;
+		dest = d;
+		weight = w;
+	}
+
+	bool operator<(const MSTEdge& other) {
+		return weight < other.weight;
+	}
+
+	bool operator>(const MSTEdge& other) {
+		return weight > other.weight;
+	}
+
+	bool operator==(const MSTEdge& other) {
+		return weight == other.weight;
+	}
+
+	bool operator<=(const MSTEdge& other) {
+		return (*this < other || *this == other);
+	}
+
+	bool operator>=(const MSTEdge& other) {
+		return (*this > other || *this == other);
+	}
+};
 
 class UndirectedGraph : AbstractGraph {
 private:
 	GraphAdjacencyBase* g;
 	GraphMode m;
+
+	LinearList<MSTEdge> getEdges() {
+		LinearList<MSTEdge> edges;
+		for (int i = 0; i < vertices(); i++) {
+			list<GraphEdge> adjacents = adjacentVertices(i);	
+			for (auto adjacent : adjacents) {
+				if (i < adjacent.dest) {
+					edges.push_back(MSTEdge(i, adjacent.dest, adjacent.weight));
+				}
+			}
+		}
+
+		Sort<MSTEdge> s;
+		s.quickSort(edges, 0, edges.size());
+
+		return edges;
+	}
 
 public:
 	/*
@@ -171,12 +226,29 @@ public:
 
 		return pred;
 	}
+
+	virtual LinearList<int> kruskal() override {
+		LinearList<int> pred(vertices(), -1);		
+		UFDS disjointSet(vertices());
+
+		LinearList<MSTEdge> edges = getEdges();
+		for (int i = 0; i < edges.size(); i++) {
+			if (disjointSet.find_set(edges[i].source) != disjointSet.find_set(edges[i].dest)) {
+				pred[edges[i].dest] = edges[i].source;
+				disjointSet.union_set(edges[i].source, edges[i].dest);
+			}
+		}
+
+		return pred;
+	}
+
 	/*
 	 * Returns the degree of the vertex.
 	 */
 	int degree(int i) {
 		return g->outdegree(i);
 	}
+
 };
 
 }
