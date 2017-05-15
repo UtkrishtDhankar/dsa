@@ -17,3 +17,4 @@ script:
   - make -C assignment-5/
   - make -C assignment-6/
   - make -C assignment-7/
+  - make -C assignment-8/
