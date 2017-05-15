@@ -11,7 +11,7 @@ PRIM_EXEC=prim
 PRIM_SRC=PrimProblem.cpp
 
 KRUSKAL_EXEC=kruskal
-KRUSKAL_SRC=PrimProblem.cpp
+KRUSKAL_SRC=KruskalProblem.cpp
 
 all: undirected directed prim kruskal
 
