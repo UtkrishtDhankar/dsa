@@ -283,21 +283,6 @@ public:
 		return mst;
 	}
 
-	void print_heap(MinPriorityQueue<PrimVertex>& heap) {
-		const LinearList<PrimVertex> heap_arr = heap.peak();
-		for(int i = 0; i < vertices(); i++){
-			std::cout << heap_arr.copy_at(i).vertex << ": " << heap_arr.copy_at(i).key << ", ";
-		}
-		std::cout << std::endl;
-	}
-
-	void print_arr(const LinearList<int>& arr) {
-		for (int i = 0; i < arr.size(); i++) {
-			std::cout << arr.copy_at(i) << ", ";
-		}
-		std::cout << std::endl;
-	}
-
 	UndirectedGraph prim() {
 		LinearList<int> pred(vertices(), -2);
 		LinearList<int> s(vertices(), 0);
@@ -317,7 +302,6 @@ public:
 		while (!heap.empty()) {
 			PrimVertex min = heap.extract_min();
 			s[min.vertex] = 1;
-			std::cout << "Examining " << min.vertex << "\n";
 
 			list<GraphEdge> adjacents = adjacentVertices(min.vertex);
 			for (GraphEdge adjacent : adjacents) {
@@ -327,20 +311,11 @@ public:
 						heap.heap_decrease_key(pos, PrimVertex(adjacent.dest, adjacent.weight));
 						key[adjacent.dest] = adjacent.weight;
 						pred[adjacent.dest] = min.vertex;
-
-						std::cout << "Pred "; print_arr(pred);
-						std::cout << "Keys "; print_arr(key);
-						std::cout << "Heap "; print_heap(heap);
 					}
 				}
 			}
 
 		}
-
-		for (int i = 0; i < vertices(); i++) {
-			std::cout << pred[i] << " ";
-		}
-		std::cout << std::endl;
 
 		UndirectedGraph mst(vertices(), GraphMode::LIST);
 		for (int i = 1; i < vertices(); i++) {
