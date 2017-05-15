@@ -96,6 +96,18 @@ int main() {
                 }
                 std::cout << std::endl;
             }
+        } else if (command == "prim") {
+            cs202::UndirectedGraph mst = l.prim();
+
+            for (int i = 0; i < mst.vertices(); i++) {
+                std::cout << i << ": ";
+
+                cs202::list<cs202::GraphEdge> adjacents = mst.adjacentVertices(i);
+                for (const cs202::GraphEdge& elem : adjacents) {
+                    std::cout << "-" << elem.weight << "-> " << elem.dest << ", ";
+                }
+                std::cout << std::endl;
+            }
         } else if (command == "display") {
             for (int i = 0; i < l.vertices(); i++) {
                 std::cout << i << ": ";

@@ -4,15 +4,18 @@
  * A class to represent an UndirectedGraph
  * Subclasses AbstractGraph
  */
+#include <iostream>
+
 #include "include/queue.hpp"
 #include "include/stack.hpp"
+#include "include/MinPriorityQueue.hpp"
+#include "include/sorting.hpp"
 
 #include "AbstractGraph.hpp"
 #include "GraphAdjacencyBase.hpp"
 #include "AdjacencyList.hpp"
 #include "AdjacencyMatrix.hpp"
 #include "UFDS.hpp"
-#include "include/sorting.hpp"
 
 namespace cs202 {
 
@@ -50,6 +53,43 @@ public:
 
 	bool operator>=(const MSTEdge& other) {
 		return (*this > other || *this == other);
+	}
+};
+
+class PrimVertex {
+public:
+	int vertex;
+	int key;
+
+	PrimVertex() {
+		vertex = key = 0;
+	}
+
+	PrimVertex(int v, int k) {
+		vertex = v;
+		key = k;
+	}
+
+	PrimVertex(const PrimVertex& other) {
+		vertex = other.vertex;
+		key = other.key;
+	}
+
+	void operator=(const PrimVertex& other) {
+		vertex = other.vertex;
+		key = other.key;
+	}
+
+	bool operator<(const PrimVertex& other) {
+		return key < other.key;
+	}
+
+	bool operator>(const PrimVertex& other) {
+		return key > other.key;
+	}
+
+	bool operator==(const PrimVertex& other) {
+		return (vertex == other.vertex);
 	}
 };
 
@@ -238,6 +278,73 @@ public:
 				mst.add(edges[i].source, edges[i].dest, edges[i].weight);
 				disjointSet.union_set(edges[i].source, edges[i].dest);
 			}
+		}
+
+		return mst;
+	}
+
+	void print_heap(MinPriorityQueue<PrimVertex>& heap) {
+		const LinearList<PrimVertex> heap_arr = heap.peak();
+		for(int i = 0; i < vertices(); i++){
+			std::cout << heap_arr.copy_at(i).vertex << ": " << heap_arr.copy_at(i).key << ", ";
+		}
+		std::cout << std::endl;
+	}
+
+	void print_arr(const LinearList<int>& arr) {
+		for (int i = 0; i < arr.size(); i++) {
+			std::cout << arr.copy_at(i) << ", ";
+		}
+		std::cout << std::endl;
+	}
+
+	UndirectedGraph prim() {
+		LinearList<int> pred(vertices(), -2);
+		LinearList<int> s(vertices(), 0);
+		LinearList<int> key(vertices(), std::numeric_limits<int>::max());
+
+		MinPriorityQueue<PrimVertex> heap;
+		for (int i = 0; i < vertices(); i++) {
+			heap.insert(PrimVertex(i, std::numeric_limits<int>::max()));
+		}
+
+		int pos = heap.position_of(PrimVertex(0, 0));
+		heap.heap_decrease_key(pos, PrimVertex(0, 0));
+
+		key[0] = 0;
+		pred[0] = -1;
+		
+		while (!heap.empty()) {
+			PrimVertex min = heap.extract_min();
+			s[min.vertex] = 1;
+			std::cout << "Examining " << min.vertex << "\n";
+
+			list<GraphEdge> adjacents = adjacentVertices(min.vertex);
+			for (GraphEdge adjacent : adjacents) {
+				if (s[adjacent.dest] == 0) {
+					if (key[adjacent.dest] > adjacent.weight) {
+                        pos = heap.position_of(PrimVertex(adjacent.dest, key[adjacent.dest]));
+						heap.heap_decrease_key(pos, PrimVertex(adjacent.dest, adjacent.weight));
+						key[adjacent.dest] = adjacent.weight;
+						pred[adjacent.dest] = min.vertex;
+
+						std::cout << "Pred "; print_arr(pred);
+						std::cout << "Keys "; print_arr(key);
+						std::cout << "Heap "; print_heap(heap);
+					}
+				}
+			}
+
+		}
+
+		for (int i = 0; i < vertices(); i++) {
+			std::cout << pred[i] << " ";
+		}
+		std::cout << std::endl;
+
+		UndirectedGraph mst(vertices(), GraphMode::LIST);
+		for (int i = 1; i < vertices(); i++) {
+			mst.add(i, pred[i], key[i]);	
 		}
 
 		return mst;
